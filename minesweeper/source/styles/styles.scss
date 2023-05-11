@@ -52,31 +52,24 @@ select {
   margin: 0 30px;
 }
 
-// .head {}
-
 .head__opt {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  margin-bottom: 20px;
+
+  // padding: 20px 0 15px 0;
+  // margin: 0 30px;
 }
 
 .head__opt,
-.head__count,
+.count,
 .game__field,
 .result {
   border-top: 4px solid $color-border-d;
   border-left: 4px solid $color-border-d;
   border-right: 4px solid $color-border-l;
   border-bottom: 4px solid $color-border-l;
-}
-
-.head__count {
-  padding: 10px 30px 10px 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .head__inputs {
@@ -115,8 +108,21 @@ select {
   cursor: pointer;
 }
 
-.head__duration,
-.head__clicks {
+.game__content {
+  margin: 0 30px;
+  padding: 20px 0 15px 0;
+}
+
+.count {
+  padding: 10px 30px 10px 30px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.count__duration,
+.count__clicks {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -160,7 +166,6 @@ select {
 // ///////////////////////////////////////////
 
 .game__field {
-  margin: 0 30px;
   @extend %transition;
 }
 

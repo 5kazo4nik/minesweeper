@@ -46,7 +46,6 @@ module.exports = (env, options) => {
     output: {
       path: path.resolve(__dirname, 'app'),
       filename: `./scripts/${filename('js')}`,
-      publicPath: '',
     },
     module: {
       rules: [
