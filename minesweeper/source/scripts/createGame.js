@@ -4,12 +4,11 @@ import { createNode, insertNode } from './useNode';
 
 class Game {
   build() {
-    this.createElements();
-    this.appendElements();
-    console.log('hi');
+    this._createElements();
+    this._appendElements();
   }
 
-  createElements() {
+  _createElements() {
     this.main = createNode('main', 'wrapper');
     this.game = createNode('div', 'game');
 
@@ -25,7 +24,7 @@ class Game {
     this.list = createNode('ol', 'result__list');
   }
 
-  appendElements() {
+  _appendElements() {
     for (let i = 0; i < 10; i++) {
       const item = createNode('li', 'result__item');
       insertNode(this.list, item);

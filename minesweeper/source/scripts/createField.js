@@ -5,7 +5,14 @@ class Field {
     this.num = num;
   }
 
-  createCells() {
+  build() {
+    this._createElements();
+    this._appendELements();
+    this._bindEvents();
+    return this.gameContent;
+  }
+
+  _createCells() {
     const field = createNode('div', 'game__field', 'field');
 
     for (let i = 0; i < this.num; i++) {
@@ -23,22 +30,16 @@ class Field {
     return field;
   }
 
-  build() {
-    this.createElements();
-    this.appendELements();
-    return this.gameContent;
-  }
-
-  createElements() {
+  _createElements() {
     this.gameContent = createNode('div', 'game__content');
     this.counters = createNode('div', 'count');
     this.duration = createNode('div', 'count__duration');
     this.restartBtn = createNode('div', 'btn-restart');
     this.clicks = createNode('div', 'count__clicks');
-    this.field = this.createCells();
+    this.field = this._createCells();
   }
 
-  appendELements() {
+  _appendELements() {
     insertNode(this.duration, '000');
     insertNode(this.clicks, '000');
 
@@ -48,6 +49,49 @@ class Field {
     insertNode(this.gameContent, this.counters);
     insertNode(this.gameContent, this.field);
   }
+
+  _bindEvents() {
+    document.addEventListener('dragstart', (e) => e.preventDefault());
+    document.addEventListener('mouseover', this._hoverOn);
+    document.addEventListener('mousedown', this._clickDown);
+
+    const clickUp = this._clickUp.bind(this);
+    document.addEventListener('mouseup', clickUp);
+  }
+
+  _clickDown(e) {
+    mouse = true;
+    if (e.target.classList.contains('cell')) e.target.classList.add('cell_active');
+    if (e.target.classList.contains('btn-restart')) e.target.classList.add('btn-restart_active');
+  }
+
+  _clickUp(e) {
+    mouse = false;
+    if (e.target.classList.contains('cell')) e.target.classList.remove('cell_active');
+    if (e.target.classList.contains('btn-restart')) {
+      e.target.classList.remove('btn-restart_active');
+      this._createElements();
+      this._appendELements();
+      document.querySelector('.game__content').replaceWith(this.gameContent);
+    }
+  }
+
+  _hoverOn(e) {
+    if (mouse && e.target.classList.contains('cell')) {
+      e.target.classList.add('cell_active');
+    }
+
+    if (mouse && e.target.classList.contains('btn-restart')) {
+      e.target.classList.add('btn-restart_active');
+    }
+
+    if (e.relatedTarget) {
+      e.relatedTarget.classList.remove('cell_active');
+      e.relatedTarget.classList.remove('btn-restart_active');
+    }
+  }
 }
+
+let mouse = false;
 
 export { Field };

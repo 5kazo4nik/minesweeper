@@ -8,13 +8,13 @@ class Options {
   }
 
   build() {
-    this.createElements();
-    this.appendElements();
-    this.addAttr();
+    this._createElements();
+    this._appendElements();
+    this._addAttr();
     return this.head;
   }
 
-  createElements() {
+  _createElements() {
     document.body.classList.add('body', 'body');
     if (this.theme) document.body.classList.add('body_dark');
 
@@ -36,7 +36,7 @@ class Options {
     if (this.theme) this.themeBtn.classList.add('head__theme_dark');
   }
 
-  appendElements() {
+  _appendElements() {
     insertNode(this.opt1, 'Easy');
     insertNode(this.opt2, 'Medium');
     insertNode(this.opt3, 'Hard');
@@ -55,7 +55,7 @@ class Options {
     insertNode(this.head, this.options);
   }
 
-  addAttr() {
+  _addAttr() {
     this.opt1.value = 10;
     this.opt2.value = 15;
     this.opt3.value = 25;
