@@ -6,13 +6,14 @@ class Game {
   build() {
     this._createElements();
     this._appendElements();
+    this._bindEvents();
   }
 
   _createElements() {
     this.main = createNode('main', 'wrapper');
     this.game = createNode('div', 'game');
 
-    const builderField = new Field(10);
+    const builderField = new Field(10, 10);
     const builderOptions = new Options(10);
 
     this.options = builderOptions.build();
@@ -41,6 +42,10 @@ class Game {
 
     insertNode(this.main, this.game);
     insertNode(document.body, this.main);
+  }
+
+  _bindEvents() {
+    this.game.addEventListener('contextmenu', (e) => e.preventDefault());
   }
 }
 

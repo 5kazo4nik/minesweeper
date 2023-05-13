@@ -111,6 +111,7 @@ select {
 .game__content {
   margin: 0 30px;
   padding: 20px 0 15px 0;
+  user-select: none;
 }
 
 .count {
@@ -198,6 +199,19 @@ select {
     border-left: 3px solid rgba(156, 156, 156, 0);
     outline: 1px solid $color-border-d;
     outline-offset: -1px;
+  }
+
+  &_bomb {
+    // background-color: red;
+    background-image: url('../assets/svg/bomb_icon_136879.svg');
+    background-position: center;
+    background-size: cover;
+  }
+
+  &_flag {
+    background-image: url('../assets/svg/флаг.svg');
+    background-position: center;
+    background-size: cover;
   }
 }
 

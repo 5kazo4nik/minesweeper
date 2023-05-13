@@ -11,4 +11,4 @@ import { Game } from './createGame';
 // console.log(options.build());
 
 const game = new Game();
-console.log(game.build());
+game.build();
