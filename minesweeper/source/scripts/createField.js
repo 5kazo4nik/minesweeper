@@ -157,9 +157,9 @@ class Field {
   _setCellValue(field, cell, rowIndex, cellIndex) {
     let counter = 0;
     cell.classList.add('cell_open');
+    cell.classList.remove('cell_flag');
 
     if (minesArr.includes(cell)) {
-      // cell.classList.add('cell_bomb');
       cell.style.backgroundColor = 'red';
       minesArr.forEach((el) => el.classList.add('cell_bomb'));
       document.querySelector('.btn-restart').classList.add('btn-restart_lose');
