@@ -13,7 +13,7 @@ class Game {
     this.main = createNode('main', 'wrapper');
     this.game = createNode('div', 'game');
 
-    const builderField = new Field(10, 10);
+    const builderField = new Field(10, 10, isChange);
     const builderOptions = new Options(10);
 
     this.options = builderOptions.build();
@@ -46,7 +46,32 @@ class Game {
 
   _bindEvents() {
     this.game.addEventListener('contextmenu', (e) => e.preventDefault());
+
+    const select = document.querySelector('.head__size');
+    select.addEventListener('input', this._changeLevel);
+  }
+
+  _changeLevel(e) {
+    // console.log(e.target.value);
+    // document.removeEventListener('mouseup', clickUp);
+    isChange = true;
+    let builderField;
+    if (e.target.value === '10') {
+      builderField = new Field(10, 10, isChange);
+    }
+    if (e.target.value === '15') {
+      builderField = new Field(15, 40, isChange);
+    }
+    if (e.target.value === '25') {
+      builderField = new Field(25, 100, isChange);
+    }
+
+    const newField = builderField.build();
+    document.querySelector('.game__content').replaceWith(newField);
+    isChange = false;
   }
 }
 
-export { Game };
+let isChange = false;
+
+export { Game, isChange };

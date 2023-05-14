@@ -1,14 +1,16 @@
 import { createNode, insertNode } from './useNode';
 
 class Field {
-  constructor(num, mines) {
+  constructor(num, mines, isChange) {
     this.numCells = num;
     this.mines = mines;
+    this.isChange = isChange;
   }
 
   build() {
     this._createElements();
     this._appendELements();
+    this._updateFlags();
     this._bindEvents();
     return this.gameContent;
   }
@@ -51,12 +53,25 @@ class Field {
     insertNode(this.gameContent, this.field);
   }
 
+  _updateFlags() {
+    firstClick = true;
+    firstClick = true;
+    checkedArr = [];
+    minesArr = [];
+    isLose = false;
+  }
+
   _bindEvents() {
     document.addEventListener('dragstart', (e) => e.preventDefault());
     document.addEventListener('mouseover', this._hoverOn);
     document.addEventListener('mousedown', this._clickDown);
 
+    if (this.isChange) {
+      console.log(prevClickUp);
+      document.removeEventListener('mouseup', prevClickUp);
+    }
     const clickUp = this._clickUp.bind(this);
+    prevClickUp = clickUp;
     document.addEventListener('mouseup', clickUp);
   }
 
@@ -72,11 +87,12 @@ class Field {
       e.target.classList.remove('btn-restart_active');
       this._createElements();
       this._appendELements();
+      this._updateFlags();
       document.querySelector('.game__content').replaceWith(this.gameContent);
-      firstClick = true;
-      checkedArr = [];
-      minesArr = [];
-      isLose = false;
+      // firstClick = true;
+      // checkedArr = [];
+      // minesArr = [];
+      // isLose = false;
     }
 
     if (e.target.classList.contains('cell')) {
@@ -113,6 +129,7 @@ class Field {
 
     if (firstClick) {
       if (e.button !== 2) checkedArr.push(e.target);
+      console.log(this.mines);
       this._setMines(field);
     }
 
@@ -255,5 +272,6 @@ let checkedArr = [];
 let minesArr = [];
 let firstClick = true;
 let isLose = false;
+let prevClickUp;
 
 export { Field };
