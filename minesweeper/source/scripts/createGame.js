@@ -49,23 +49,58 @@ class Game {
 
     const select = document.querySelector('.head__size');
     select.addEventListener('input', this._changeLevel);
+
+    const input = document.querySelector('.head__mines');
+    input.addEventListener('change', this._changeMines);
   }
 
   _changeLevel(e) {
-    // console.log(e.target.value);
-    // document.removeEventListener('mouseup', clickUp);
     isChange = true;
     let builderField;
+    const inputMines = document.querySelector('.head__mines');
     if (e.target.value === '10') {
       builderField = new Field(10, 10, isChange);
+      inputMines.value = 10;
     }
     if (e.target.value === '15') {
       builderField = new Field(15, 40, isChange);
+      inputMines.value = 40;
     }
     if (e.target.value === '25') {
       builderField = new Field(25, 100, isChange);
+      inputMines.value = 100;
     }
 
+    const newField = builderField.build();
+    document.querySelector('.game__content').replaceWith(newField);
+    isChange = false;
+  }
+
+  _changeMines(e) {
+    const select = document.querySelector('.head__size');
+    let mines;
+    const value = Number(e.target.value);
+    if (select.value === '10') {
+      if (value > 99) {
+        mines = 99;
+      } else {
+        mines = value;
+      }
+    } else if (select.value === '15') {
+      if (value > 224) {
+        mines = 224;
+      } else {
+        mines = value;
+      }
+    } else if (select.value === '25') {
+      if (value > 624) {
+        mines = 624;
+      } else {
+        mines = value;
+      }
+    }
+    isChange = true;
+    const builderField = new Field(Number(select.value), mines, isChange);
     const newField = builderField.build();
     document.querySelector('.game__content').replaceWith(newField);
     isChange = false;

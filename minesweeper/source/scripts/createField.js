@@ -67,7 +67,6 @@ class Field {
     document.addEventListener('mousedown', this._clickDown);
 
     if (this.isChange) {
-      console.log(prevClickUp);
       document.removeEventListener('mouseup', prevClickUp);
     }
     const clickUp = this._clickUp.bind(this);
@@ -129,7 +128,6 @@ class Field {
 
     if (firstClick) {
       if (e.button !== 2) checkedArr.push(e.target);
-      console.log(this.mines);
       this._setMines(field);
     }
 
@@ -155,20 +153,23 @@ class Field {
 
   _setMines(field) {
     firstClick = false;
+    console.log(this.mines);
+    console.log(this.numCells);
     for (let i = 0; i < this.mines; i++) {
-      let row = Math.floor(Math.random() * (this.numCells - 1));
-      let cell = Math.floor(Math.random() * (this.numCells - 1));
+      let row = Math.floor(Math.random() * this.numCells);
+      let cell = Math.floor(Math.random() * this.numCells);
       let existMine = minesArr.includes(field[row].children[cell]);
       let existCell = checkedArr.includes(field[row].children[cell]);
 
       while (existCell || existMine) {
-        row = Math.floor(Math.random() * (this.numCells - 1));
-        cell = Math.floor(Math.random() * (this.numCells - 1));
+        row = Math.floor(Math.random() * this.numCells);
+        cell = Math.floor(Math.random() * this.numCells);
         existMine = minesArr.includes(field[row].children[cell]);
         existCell = checkedArr.includes(field[row].children[cell]);
       }
       minesArr.push(field[row].children[cell]);
     }
+    // console.log(minesArr.length);
   }
 
   _setCellValue(field, cell, rowIndex, cellIndex) {
