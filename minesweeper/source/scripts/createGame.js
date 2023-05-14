@@ -7,9 +7,11 @@ class Game {
     this._createElements();
     this._appendElements();
     this._bindEvents();
+    playBg();
   }
 
   _createElements() {
+    this.bg = createNode('div', 'bg-gif');
     this.main = createNode('main', 'wrapper');
     this.game = createNode('div', 'game');
 
@@ -41,6 +43,7 @@ class Game {
     insertNode(this.game, this.gameResult);
 
     insertNode(this.main, this.game);
+    insertNode(document.body, this.bg);
     insertNode(document.body, this.main);
   }
 
@@ -52,6 +55,13 @@ class Game {
 
     const input = document.querySelector('.head__mines');
     input.addEventListener('change', this._changeMines);
+
+    const themeBtn = document.querySelector('.head__theme');
+    themeBtn.addEventListener('click', this._switchTheme);
+
+    audioBg.addEventListener('ended', () => {
+      playBg();
+    });
   }
 
   _changeLevel(e) {
@@ -105,8 +115,29 @@ class Game {
     document.querySelector('.game__content').replaceWith(newField);
     isChange = false;
   }
+
+  _switchTheme(e) {
+    const bg = document.querySelector('.bg-gif');
+    bg.classList.toggle('bg-gif_dark');
+    e.target.classList.toggle('head__theme_dark');
+    isDark = !isDark;
+    playBg();
+  }
 }
 
+function playBg() {
+  if (isDark) {
+    audioBg.src = '../assets/sound/Костер.mp3';
+  } else {
+    audioBg.src = '../assets/sound/Вода.mp3';
+  }
+  audioBg.currentTime = 0;
+  audioBg.volume = 0.1;
+  audioBg.play();
+}
+
+const audioBg = new Audio();
 let isChange = false;
+let isDark = false;
 
 export { Game, isChange };
