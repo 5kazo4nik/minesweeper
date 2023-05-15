@@ -130,6 +130,7 @@ class Field {
     const curRow = e.target.closest('.field__row');
     const rowIndex = field.indexOf(curRow);
     const cellIndex = [...curRow.children].indexOf(e.target);
+    const soundBtn = document.querySelector('.head__sound');
 
     if (firstClick) {
       if (e.button !== 2) checkedArr.push(e.target);
@@ -139,7 +140,7 @@ class Field {
 
     if (e.button === 2) {
       e.target.classList.toggle('cell_flag');
-      playSound('../assets/sound/Флажок.mp3', 0.3);
+      if (!soundBtn.classList.contains('head__sound_off')) playSound('../assets/sound/Флажок.mp3', 0.3);
       return;
     }
     if (e.target.classList.contains('cell_flag')) return;
@@ -148,12 +149,12 @@ class Field {
     if (counter === 0) {
       this._openNearCells(field, e.target, rowIndex, cellIndex);
     }
-    if (counter >= 0) {
+    if (counter >= 0 && !soundBtn.classList.contains('head__sound_off')) {
       playSound('../assets/sound/Клик.mp3', 0.4);
     }
 
     if (checkedArr.length + minesArr.length === this.numCells * this.numCells && !isWin) {
-      playSound('../assets/sound/Победа.mp3', 0.3);
+      if (!soundBtn.classList.contains('head__sound_off')) playSound('../assets/sound/Победа.mp3', 0.3);
       isWin = true;
     }
   }
@@ -179,6 +180,7 @@ class Field {
 
   _setCellValue(field, cell, rowIndex, cellIndex) {
     let counter = 0;
+    const soundBtn = document.querySelector('.head__sound');
     cell.classList.add('cell_open');
     cell.classList.remove('cell_flag');
 
@@ -187,8 +189,10 @@ class Field {
       minesArr.forEach((el) => el.classList.add('cell_bomb'));
       document.querySelector('.btn-restart').classList.add('btn-restart_lose');
       isLose = true;
-      playSound('../assets/sound/Взрыв.mp3', 0.3);
-      playSound('../assets/sound/Поражение.mp3', 0.3);
+      if (!soundBtn.classList.contains('head__sound_off')) {
+        playSound('../assets/sound/Взрыв.mp3', 0.3);
+        playSound('../assets/sound/Поражение.mp3', 0.3);
+      }
       return -1;
     }
 

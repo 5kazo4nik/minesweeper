@@ -59,6 +59,12 @@ class Game {
     const themeBtn = document.querySelector('.head__theme');
     themeBtn.addEventListener('click', this._switchTheme);
 
+    const soundBtn = document.querySelector('.head__sound');
+    soundBtn.addEventListener('click', (e) => {
+      e.target.classList.toggle('head__sound_off');
+      playBg();
+    });
+
     audioBg.addEventListener('ended', playBg);
   }
 
@@ -131,14 +137,20 @@ class Game {
 //   }
 // }
 function playBg() {
-  if (isDark) {
-    audioBg.src = '../assets/sound/Костер.mp3';
+  const soundBtn = document.querySelector('.head__sound');
+  if (!soundBtn.classList.contains('head__sound_off')) {
+    if (isDark) {
+      audioBg.src = '../assets/sound/Костер.mp3';
+    } else {
+      audioBg.src = '../assets/sound/Вода.mp3';
+    }
+    audioBg.autoplay = true;
+    audioBg.currentTime = 0;
+    audioBg.volume = 0.1;
+    audioBg.play();
   } else {
-    audioBg.src = '../assets/sound/Вода.mp3';
+    audioBg.pause();
   }
-  audioBg.currentTime = 0;
-  audioBg.volume = 0.1;
-  audioBg.play();
 }
 
 const audioBg = new Audio();

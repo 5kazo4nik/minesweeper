@@ -21,8 +21,7 @@ class Options {
     this.head = createNode('div', 'game__head', 'head');
     this.options = createNode('div', 'head__opt');
 
-    this.soundBtn = createNode('div', 'head__sound');
-    if (this.volume) this.soundBtn.classList.add('head__sound_off');
+    this.soundBtn = createNode('div', 'head__sound', 'head__sound_off');
 
     this.inputs = createNode('div', 'head__inputs');
     this.inputMines = createNode('input', 'head__mines');
