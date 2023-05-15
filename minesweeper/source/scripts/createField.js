@@ -63,6 +63,7 @@ class Field {
     isWin = false;
     clicksCounter = 0;
     secondsCounter = 0;
+    clearInterval(secondsInterval);
     secondsInterval = null;
   }
 
