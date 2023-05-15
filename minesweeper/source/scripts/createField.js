@@ -209,8 +209,12 @@ class Field {
   _setCellValue(field, cell, rowIndex, cellIndex) {
     let counter = 0;
     const soundBtn = document.querySelector('.head__sound');
+    if (cell.classList.contains('cell_flag')) {
+      // flags += 1;
+      return;
+    }
     cell.classList.add('cell_open');
-    cell.classList.remove('cell_flag');
+    // cell.classList.remove('cell_flag');
 
     if (minesArr.includes(cell)) {
       cell.style.backgroundColor = 'red';
