@@ -66,6 +66,12 @@ class Game {
     });
 
     audioBg.addEventListener('ended', playBg);
+
+    document.addEventListener('click', (e) => {
+      if (e.target.classList.contains('modal')) {
+        e.target.remove();
+      }
+    });
   }
 
   _changeLevel(e) {

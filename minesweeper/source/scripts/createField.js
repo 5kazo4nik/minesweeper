@@ -1,3 +1,4 @@
+import { Modal } from './modal';
 import { playSound } from './playSound';
 import { createNode, insertNode } from './useNode';
 
@@ -105,7 +106,9 @@ class Field {
         this._setOnClick(e);
         this._setClicksCount();
       }
-      if (isWin || isLose) clearInterval(secondsInterval);
+      if (isWin || isLose) {
+        clearInterval(secondsInterval);
+      }
     }
   }
 
@@ -157,6 +160,11 @@ class Field {
     if (checkedArr.length + minesArr.length === this.numCells * this.numCells && !isWin) {
       if (!soundBtn.classList.contains('head__sound_off')) playSound('../assets/sound/Победа.mp3', 0.3);
       isWin = true;
+    }
+
+    if (isWin || isLose) {
+      const modal = new Modal(isWin, isLose, secondsCounter, clicksCounter);
+      document.body.prepend(modal.build());
     }
   }
 
