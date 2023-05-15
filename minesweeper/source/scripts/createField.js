@@ -103,8 +103,8 @@ class Field {
       e.target.classList.remove('cell_active');
 
       if (!e.target.classList.contains('cell_open') && !isWin && !isLose) {
+        this._setClicksCount(e);
         this._setOnClick(e);
-        this._setClicksCount();
       }
       if (isWin || isLose) {
         clearInterval(secondsInterval);
@@ -291,10 +291,12 @@ class Field {
     }
   }
 
-  _setClicksCount() {
-    clicksCounter += 1;
-    const totalClicks = String(clicksCounter).padStart(3, 0);
-    this.clicks.textContent = totalClicks;
+  _setClicksCount(e) {
+    if (!e.target.className.match(/(open|flag)/) && e.button !== 2) {
+      clicksCounter += 1;
+      const totalClicks = String(clicksCounter).padStart(3, 0);
+      this.clicks.textContent = totalClicks;
+    }
   }
 
   _setSecondsInterval() {
