@@ -132,13 +132,17 @@ select {
 .count {
   padding: 10px 30px 10px 30px;
   margin-bottom: 20px;
+}
+
+.count__content {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 .count__duration,
-.count__clicks {
+.count__clicks,
+.count__flags {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -158,6 +162,7 @@ select {
 }
 
 .btn-restart {
+  margin: 0 auto 10px auto;
   width: 35px;
   height: 30px;
   padding: 2px;

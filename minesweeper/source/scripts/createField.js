@@ -39,19 +39,27 @@ class Field {
   _createElements() {
     this.gameContent = createNode('div', 'game__content');
     this.counters = createNode('div', 'count');
-    this.duration = createNode('div', 'count__duration');
     this.restartBtn = createNode('div', 'btn-restart');
+    this.countContent = createNode('div', 'count__content');
+    this.duration = createNode('div', 'count__duration');
+    this.flags = createNode('div', 'count__flags');
     this.clicks = createNode('div', 'count__clicks');
     this.field = this._createCells();
   }
 
   _appendELements() {
     insertNode(this.duration, '000');
+    insertNode(this.flags, String(this.mines).padStart(3, 0));
     insertNode(this.clicks, '000');
 
-    insertNode(this.counters, this.duration);
+    insertNode(this.countContent, this.duration);
+    insertNode(this.countContent, this.flags);
+    insertNode(this.countContent, this.clicks);
+    // insertNode(this.counters, this.duration);
     insertNode(this.counters, this.restartBtn);
-    insertNode(this.counters, this.clicks);
+    insertNode(this.counters, this.countContent);
+
+    // insertNode(this.counters, this.clicks);
     insertNode(this.gameContent, this.counters);
     insertNode(this.gameContent, this.field);
   }
@@ -66,6 +74,7 @@ class Field {
     secondsCounter = 0;
     clearInterval(secondsInterval);
     secondsInterval = null;
+    flags = this.mines;
   }
 
   _bindEvents() {
@@ -143,11 +152,21 @@ class Field {
     }
 
     if (e.button === 2) {
+      if (e.target.classList.contains('cell_flag')) {
+        flags += 1;
+      } else if (flags > 0) {
+        flags -= 1;
+      } else {
+        return;
+      }
+      document.querySelector('.count__flags').textContent = String(flags).padStart(3, 0);
       e.target.classList.toggle('cell_flag');
       if (!soundBtn.classList.contains('head__sound_off')) playSound('../assets/sound/Флажок.mp3', 0.3);
       return;
     }
-    if (e.target.classList.contains('cell_flag')) return;
+    if (e.target.classList.contains('cell_flag')) {
+      return;
+    }
 
     const counter = this._setCellValue(field, e.target, rowIndex, cellIndex);
     if (counter === 0) {
@@ -318,5 +337,6 @@ let isWin = false;
 let clicksCounter = 0;
 let secondsCounter = 0;
 let secondsInterval;
+let flags;
 
 export { Field };
