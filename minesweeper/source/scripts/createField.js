@@ -57,11 +57,13 @@ class Field {
 
   _updateFlags() {
     firstClick = true;
-    firstClick = true;
     checkedArr = [];
     minesArr = [];
     isLose = false;
     isWin = false;
+    clicksCounter = 0;
+    secondsCounter = 0;
+    secondsInterval = null;
   }
 
   _bindEvents() {
@@ -77,6 +79,8 @@ class Field {
     document.addEventListener('mouseup', clickUp);
   }
 
+  // ///////////////////////////////////////////////////////////////////////
+
   _clickDown(e) {
     mouse = true;
     if (e.target.classList.contains('cell')) e.target.classList.add('cell_active');
@@ -91,16 +95,16 @@ class Field {
       this._appendELements();
       this._updateFlags();
       document.querySelector('.game__content').replaceWith(this.gameContent);
-      // firstClick = true;
-      // checkedArr = [];
-      // minesArr = [];
-      // isLose = false;
     }
 
     if (e.target.classList.contains('cell')) {
       e.target.classList.remove('cell_active');
 
-      if (!e.target.classList.contains('cell_open') && !isWin && !isLose) this._setOnClick(e);
+      if (!e.target.classList.contains('cell_open') && !isWin && !isLose) {
+        this._setOnClick(e);
+        this._setClicksCount();
+      }
+      if (isWin || isLose) clearInterval(secondsInterval);
     }
   }
 
@@ -122,8 +126,6 @@ class Field {
   // //////////////////////////////////////////////////////////////////
 
   _setOnClick(e) {
-    if (isLose) return;
-
     const field = [...document.querySelector('.field').children];
     const curRow = e.target.closest('.field__row');
     const rowIndex = field.indexOf(curRow);
@@ -131,6 +133,7 @@ class Field {
 
     if (firstClick) {
       if (e.button !== 2) checkedArr.push(e.target);
+      secondsInterval = this._setSecondsInterval();
       this._setMines(field);
     }
 
@@ -142,7 +145,6 @@ class Field {
     if (e.target.classList.contains('cell_flag')) return;
 
     const counter = this._setCellValue(field, e.target, rowIndex, cellIndex);
-
     if (counter === 0) {
       this._openNearCells(field, e.target, rowIndex, cellIndex);
     }
@@ -154,8 +156,6 @@ class Field {
       playSound('../assets/sound/Победа.mp3', 0.3);
       isWin = true;
     }
-    // console.log(checkedArr.length + minesArr.length);
-    // console.log(this.numCells);
   }
 
   _setMines(field) {
@@ -277,6 +277,20 @@ class Field {
       if (counter === 0) this._openNearCells(field, left, rowIndex, cellIndex - 1);
     }
   }
+
+  _setClicksCount() {
+    clicksCounter += 1;
+    const totalClicks = String(clicksCounter).padStart(3, 0);
+    this.clicks.textContent = totalClicks;
+  }
+
+  _setSecondsInterval() {
+    return setInterval(() => {
+      secondsCounter += 1;
+      const totalSeconds = String(secondsCounter).padStart(3, 0);
+      this.duration.textContent = totalSeconds;
+    }, 1000);
+  }
 }
 
 let mouse = false;
@@ -286,5 +300,8 @@ let firstClick = true;
 let isLose = false;
 let prevClickUp;
 let isWin = false;
+let clicksCounter = 0;
+let secondsCounter = 0;
+let secondsInterval;
 
 export { Field };

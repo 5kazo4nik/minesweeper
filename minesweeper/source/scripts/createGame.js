@@ -1,6 +1,5 @@
 import { Field } from './createField';
 import { Options } from './createOpt';
-import { playSound } from './playSound';
 import { createNode, insertNode } from './useNode';
 
 class Game {
@@ -124,26 +123,26 @@ class Game {
   }
 }
 
-function playBg() {
-  if (isDark) {
-    playSound('../assets/sound/Костер.mp3', 0.1);
-  } else {
-    playSound('../assets/sound/Вода.mp3', 0.1);
-  }
-}
 // function playBg() {
 //   if (isDark) {
-//     audioBg.src = '../assets/sound/Костер.mp3';
+//     playSound('../assets/sound/Костер.mp3', 0.1);
 //   } else {
-//     audioBg.src = '../assets/sound/Вода.mp3';
+//     playSound('../assets/sound/Вода.mp3', 0.1);
 //   }
-//   audioBg.currentTime = 0;
-//   audioBg.volume = 0.1;
-//   audioBg.play();
 // }
+function playBg() {
+  if (isDark) {
+    audioBg.src = '../assets/sound/Костер.mp3';
+  } else {
+    audioBg.src = '../assets/sound/Вода.mp3';
+  }
+  audioBg.currentTime = 0;
+  audioBg.volume = 0.1;
+  audioBg.play();
+}
 
 const audioBg = new Audio();
 let isChange = false;
 let isDark = false;
 
-export { Game, isChange };
+export { Game };
