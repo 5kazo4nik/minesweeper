@@ -1,3 +1,4 @@
+import { playSound } from './playSound';
 import { createNode, insertNode } from './useNode';
 
 class Field {
@@ -60,6 +61,7 @@ class Field {
     checkedArr = [];
     minesArr = [];
     isLose = false;
+    isWin = false;
   }
 
   _bindEvents() {
@@ -134,28 +136,30 @@ class Field {
 
     if (e.button === 2) {
       e.target.classList.toggle('cell_flag');
+      playSound('../assets/sound/Флажок.mp3', 0.3);
       return;
     }
     if (e.target.classList.contains('cell_flag')) return;
 
-    // e.target.classList.add('cell_open');
-    // if (minesArr.includes(e.target)) {
-    //   e.target.classList.add('cell_bomb');
-    //   document.querySelector('.btn-restart').classList.add('btn-restart_lose');
-    //   isLose = true;
-    //   return;
-    // }
-
     const counter = this._setCellValue(field, e.target, rowIndex, cellIndex);
+
     if (counter === 0) {
       this._openNearCells(field, e.target, rowIndex, cellIndex);
     }
+    if (counter >= 0) {
+      playSound('../assets/sound/Клик.mp3', 0.4);
+    }
+
+    if (checkedArr.length + minesArr.length === this.numCells * this.numCells && !isWin) {
+      playSound('../assets/sound/Победа.mp3', 0.3);
+      isWin = true;
+    }
+    // console.log(checkedArr.length + minesArr.length);
+    // console.log(this.numCells);
   }
 
   _setMines(field) {
     firstClick = false;
-    console.log(this.mines);
-    console.log(this.numCells);
     for (let i = 0; i < this.mines; i++) {
       let row = Math.floor(Math.random() * this.numCells);
       let cell = Math.floor(Math.random() * this.numCells);
@@ -183,6 +187,8 @@ class Field {
       minesArr.forEach((el) => el.classList.add('cell_bomb'));
       document.querySelector('.btn-restart').classList.add('btn-restart_lose');
       isLose = true;
+      playSound('../assets/sound/Взрыв.mp3', 0.3);
+      playSound('../assets/sound/Поражение.mp3', 0.3);
       return -1;
     }
 
@@ -204,6 +210,10 @@ class Field {
     cell.dataset.col = counter;
     if (counter > 0) {
       cell.textContent = counter;
+    }
+
+    if (!checkedArr.includes(cell)) {
+      checkedArr.push(cell);
     }
 
     return counter;
@@ -275,5 +285,6 @@ let minesArr = [];
 let firstClick = true;
 let isLose = false;
 let prevClickUp;
+let isWin = false;
 
 export { Field };
