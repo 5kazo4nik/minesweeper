@@ -22,9 +22,10 @@ class Field {
       const row = createNode('div', 'field__row');
       for (let i = 0; i < this.numCells; i++) {
         const cell = createNode('div', 'field__cell', 'cell');
-        if (this.numCells === 10) {
+        if (this.numCells === 10 || this.numCells === 15) {
           cell.style.width = '20px';
           cell.style.height = '20px';
+          cell.style.fontSize = '18px';
         }
         insertNode(row, cell);
       }

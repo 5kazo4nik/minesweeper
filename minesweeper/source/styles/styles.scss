@@ -14,7 +14,7 @@ html {
 }
 
 .body {
-  min-height: 850px;
+  // min-height: 850px;
   font-size: 18px;
   font-family: 'Roboto', sans-serif;
   margin: 0;
@@ -195,6 +195,8 @@ select {
   min-width: 10px;
   min-height: 10px;
   background-color: $color-primery-l;
+  display: flex;
+  justify-content: center;
   text-align: center;
   font-weight: bold;
 
@@ -233,6 +235,7 @@ select {
   .cell {
     width: 15px;
     height: 15px;
+    font-size: 14px;
   }
 }
 
@@ -240,6 +243,7 @@ select {
   .cell {
     width: 10px;
     height: 10px;
+    font-size: 12px;
   }
 }
 
