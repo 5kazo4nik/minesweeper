@@ -60,9 +60,7 @@ class Game {
     const themeBtn = document.querySelector('.head__theme');
     themeBtn.addEventListener('click', this._switchTheme);
 
-    audioBg.addEventListener('ended', () => {
-      playBg();
-    });
+    audioBg.addEventListener('ended', playBg);
   }
 
   _changeLevel(e) {

@@ -100,7 +100,7 @@ class Field {
     if (e.target.classList.contains('cell')) {
       e.target.classList.remove('cell_active');
 
-      this._setOnClick(e);
+      if (!e.target.classList.contains('cell_open') && !isWin && !isLose) this._setOnClick(e);
     }
   }
 
