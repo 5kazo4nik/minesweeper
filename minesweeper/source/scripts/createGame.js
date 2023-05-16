@@ -15,8 +15,8 @@ class Game {
     this.main = createNode('main', 'wrapper');
     this.game = createNode('div', 'game');
 
-    const builderField = new Field(10, 10, isChange);
-    const builderOptions = new Options(10);
+    const builderField = new Field(fieldSize, mines, isChange);
+    const builderOptions = new Options(fieldSize);
 
     this.options = builderOptions.build();
     this.field = builderField.build();
@@ -79,46 +79,61 @@ class Game {
     let builderField;
     const inputMines = document.querySelector('.head__mines');
     if (e.target.value === '10') {
-      builderField = new Field(10, 10, isChange);
+      // builderField = new Field(10, 10, isChange);
+      fieldSize = 10;
+      mines = 10;
       inputMines.value = 10;
     }
     if (e.target.value === '15') {
-      builderField = new Field(15, 40, isChange);
+      // builderField = new Field(15, 40, isChange);
+      fieldSize = 15;
+      mines = 40;
       inputMines.value = 40;
     }
     if (e.target.value === '25') {
-      builderField = new Field(25, 100, isChange);
-      inputMines.value = 100;
+      // builderField = new Field(25, 100, isChange);
+      fieldSize = 25;
+      mines = 99;
+      inputMines.value = 99;
     }
 
+    builderField = new Field(fieldSize, mines, isChange);
     const newField = builderField.build();
     document.querySelector('.game__content').replaceWith(newField);
     isChange = false;
   }
 
   _changeMines(e) {
-    const select = document.querySelector('.head__size');
-    let mines;
     const value = Number(e.target.value);
-    if (select.value === '10') {
-      if (value > 99) {
-        mines = 99;
-      } else {
-        mines = value;
-      }
-    } else if (select.value === '15') {
-      if (value > 224) {
-        mines = 224;
-      } else {
-        mines = value;
-      }
-    } else if (select.value === '25') {
-      if (value > 624) {
-        mines = 624;
-      } else {
-        mines = value;
-      }
+    const select = document.querySelector('.head__size');
+    // let mines;
+    // if (select.value === '10') {
+    //   if (value > 99) {
+    //     mines = 99;
+    //   } else {
+    //     mines = value;
+    //   }
+    // } else if (select.value === '15') {
+    //   if (value > 224) {
+    //     mines = 224;
+    //   } else {
+    //     mines = value;
+    //   }
+    // } else if (select.value === '25') {
+    //   if (value > 624) {
+    //     mines = 624;
+    //   } else {
+    //     mines = value;
+    //   }
+    // }
+    if (value > 99) {
+      mines = 99;
+    } else if (value < 10) {
+      mines = 10;
+    } else {
+      mines = value;
     }
+    e.target.value = mines;
     isChange = true;
     const builderField = new Field(Number(select.value), mines, isChange);
     const newField = builderField.build();
@@ -162,5 +177,7 @@ function playBg() {
 const audioBg = new Audio();
 let isChange = false;
 let isDark = false;
+let mines = 10;
+let fieldSize = 10;
 
 export { Game };

@@ -1,7 +1,7 @@
 import { createNode, insertNode } from './useNode';
 
 class Options {
-  constructor(num = 10, theme = false, volume = false) {
+  constructor(num, theme = false, volume = false) {
     this.num = num;
     this.theme = theme;
     this.volume = volume;
@@ -60,8 +60,8 @@ class Options {
     this.opt3.value = 25;
 
     if (Number(this.num) === 10) this.opt1.selected = true;
-    if (Number(this.num) === 10) this.opt2.selected = true;
-    if (Number(this.num) === 10) this.opt3.selected = true;
+    if (Number(this.num) === 15) this.opt2.selected = true;
+    if (Number(this.num) === 25) this.opt3.selected = true;
 
     this.inputMines.type = 'number';
     this.inputMines.placeholder = 'mines';
