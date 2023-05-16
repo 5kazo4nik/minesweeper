@@ -1,10 +1,10 @@
 import { createNode, insertNode } from './useNode';
 
 class Options {
-  constructor(num, theme = false, volume = false) {
-    this.num = num;
-    this.theme = theme;
-    this.volume = volume;
+  constructor(fieldSize, mines, isDark = false) {
+    this.fieldSize = fieldSize;
+    this.mines = mines;
+    this.isDark = isDark;
   }
 
   build() {
@@ -16,7 +16,6 @@ class Options {
 
   _createElements() {
     document.body.classList.add('body', 'body');
-    if (this.theme) document.body.classList.add('body_dark');
 
     this.head = createNode('div', 'game__head', 'head');
     this.options = createNode('div', 'head__opt');
@@ -32,7 +31,7 @@ class Options {
     this.opt3 = createNode('option');
 
     this.themeBtn = createNode('div', 'head__theme');
-    if (this.theme) this.themeBtn.classList.add('head__theme_dark');
+    if (this.isDark) this.themeBtn.classList.add('head__theme_dark');
   }
 
   _appendElements() {
@@ -59,15 +58,16 @@ class Options {
     this.opt2.value = 15;
     this.opt3.value = 25;
 
-    if (Number(this.num) === 10) this.opt1.selected = true;
-    if (Number(this.num) === 15) this.opt2.selected = true;
-    if (Number(this.num) === 25) this.opt3.selected = true;
+    if (Number(this.fieldSize) === 10) this.opt1.selected = true;
+    if (Number(this.fieldSize) === 15) this.opt2.selected = true;
+    if (Number(this.fieldSize) === 25) this.opt3.selected = true;
 
     this.inputMines.type = 'number';
     this.inputMines.placeholder = 'mines';
-    if (this.num === 10) this.inputMines.value = 10;
-    if (this.num === 15) this.inputMines.value = 35;
-    if (this.num === 25) this.inputMines.value = 60;
+    this.inputMines.value = this.mines;
+    // if (this.num === 10) this.inputMines.value = 10;
+    // if (this.num === 15) this.inputMines.value = 35;
+    // if (this.num === 25) this.inputMines.value = 60;
   }
 }
 

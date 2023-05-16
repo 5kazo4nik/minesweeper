@@ -12,11 +12,12 @@ class Game {
 
   _createElements() {
     this.bg = createNode('div', 'bg-gif');
+    if (isDark) this.bg.classList.add('bg-gif_dark');
     this.main = createNode('main', 'wrapper');
     this.game = createNode('div', 'game');
 
     const builderField = new Field(fieldSize, mines, isChange);
-    const builderOptions = new Options(fieldSize);
+    const builderOptions = new Options(fieldSize, mines, isDark);
 
     this.options = builderOptions.build();
     this.field = builderField.build();
@@ -71,6 +72,12 @@ class Game {
       if (e.target.classList.contains('modal')) {
         e.target.remove();
       }
+    });
+
+    window.addEventListener('beforeunload', () => {
+      localStorage.setItem('isDark', isDark);
+      localStorage.setItem('mines', mines);
+      localStorage.setItem('fieldSize', fieldSize);
     });
   }
 
@@ -176,8 +183,8 @@ function playBg() {
 
 const audioBg = new Audio();
 let isChange = false;
-let isDark = false;
-let mines = 10;
-let fieldSize = 10;
+let isDark = localStorage.getItem('isDark') === 'true' ? true : false;
+let mines = Number(localStorage.getItem('mines')) || 10;
+let fieldSize = Number(localStorage.getItem('fieldSize')) || 10;
 
 export { Game };
