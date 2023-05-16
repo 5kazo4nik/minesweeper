@@ -3,13 +3,18 @@ import { playSound } from './playSound';
 import { createNode, insertNode } from './useNode';
 
 class Field {
-  constructor(num, mines, isChange) {
+  constructor(num, mines, isChange, save = null) {
     this.numCells = num;
     this.mines = mines;
     this.isChange = isChange;
+    this.save = save;
   }
 
   build() {
+    if (this.save !== null) {
+      isSaved = false;
+      savedField = null;
+    }
     this._createElements();
     this._appendELements();
     this._updateFlags();
@@ -18,22 +23,29 @@ class Field {
   }
 
   _createCells() {
-    const field = createNode('div', 'game__field', 'field');
+    if (!savedField) {
+      const field = createNode('div', 'game__field', 'field');
 
-    for (let i = 0; i < this.numCells; i++) {
-      const row = createNode('div', 'field__row');
       for (let i = 0; i < this.numCells; i++) {
-        const cell = createNode('div', 'field__cell', 'cell');
-        if (this.numCells === 10 || this.numCells === 15) {
-          cell.style.width = '20px';
-          cell.style.height = '20px';
-          cell.style.fontSize = '18px';
+        const row = createNode('div', 'field__row');
+        for (let j = 0; j < this.numCells; j++) {
+          const cell = createNode('div', 'field__cell', 'cell');
+          cell.dataset.x = j;
+          cell.dataset.y = i;
+          if (this.numCells === 10 || this.numCells === 15) {
+            cell.style.width = '20px';
+            cell.style.height = '20px';
+            cell.style.fontSize = '18px';
+          }
+          insertNode(row, cell);
         }
-        insertNode(row, cell);
+        insertNode(field, row);
       }
-      insertNode(field, row);
+      savedField = field;
+      return field;
+    } else {
+      return savedField;
     }
-    return field;
   }
 
   _createElements() {
@@ -48,33 +60,43 @@ class Field {
   }
 
   _appendELements() {
-    insertNode(this.duration, '000');
-    insertNode(this.flags, String(this.mines).padStart(3, 0));
-    insertNode(this.clicks, '000');
+    if (!isSaved) {
+      insertNode(this.duration, '000');
+      insertNode(this.flags, String(this.mines).padStart(3, 0));
+      insertNode(this.clicks, '000');
+    } else {
+      insertNode(this.duration, String(secondsCounter).padStart(3, 0));
+      insertNode(this.flags, String(flags).padStart(3, 0));
+      insertNode(this.clicks, String(clicksCounter).padStart(3, 0));
+    }
 
     insertNode(this.countContent, this.duration);
     insertNode(this.countContent, this.flags);
     insertNode(this.countContent, this.clicks);
-    // insertNode(this.counters, this.duration);
     insertNode(this.counters, this.restartBtn);
     insertNode(this.counters, this.countContent);
 
-    // insertNode(this.counters, this.clicks);
     insertNode(this.gameContent, this.counters);
     insertNode(this.gameContent, this.field);
   }
 
   _updateFlags() {
-    firstClick = true;
-    checkedArr = [];
-    minesArr = [];
-    isLose = false;
-    isWin = false;
-    clicksCounter = 0;
-    secondsCounter = 0;
-    clearInterval(secondsInterval);
-    secondsInterval = null;
-    flags = this.mines;
+    if (!isSaved) {
+      firstClick = true;
+      checkedArr = [];
+      minesCoords = [];
+      isLose = false;
+      isWin = false;
+      clicksCounter = 0;
+      secondsCounter = 0;
+      clearInterval(secondsInterval);
+      secondsInterval = null;
+      flags = this.mines;
+    }
+
+    if (isSaved) {
+      secondsInterval = this._setSecondsInterval();
+    }
   }
 
   _bindEvents() {
@@ -101,6 +123,8 @@ class Field {
   _clickUp(e) {
     mouse = false;
     if (e.target.classList.contains('btn-restart')) {
+      savedField = null;
+      isSaved = false;
       e.target.classList.remove('btn-restart_active');
       this._createElements();
       this._appendELements();
@@ -146,7 +170,9 @@ class Field {
     const soundBtn = document.querySelector('.head__sound');
 
     if (firstClick) {
-      if (e.button !== 2) checkedArr.push(e.target);
+      if (e.button !== 2) {
+        checkedArr.push([Number(e.target.dataset.y), Number(e.target.dataset.x)]);
+      }
       secondsInterval = this._setSecondsInterval();
       this._setMines(field);
     }
@@ -176,7 +202,7 @@ class Field {
       playSound('../assets/sound/Клик.mp3', 0.4);
     }
 
-    if (checkedArr.length + minesArr.length === this.numCells * this.numCells && !isWin) {
+    if (checkedArr.length + minesCoords.length === this.numCells * this.numCells && !isWin) {
       if (!soundBtn.classList.contains('head__sound_off')) playSound('../assets/sound/Победа.mp3', 0.3);
       isWin = true;
     }
@@ -184,7 +210,10 @@ class Field {
     if (isWin || isLose) {
       const modal = new Modal(isWin, isLose, secondsCounter, clicksCounter);
       document.body.prepend(modal.build());
+      savedField = null;
+      isSaved = false;
     }
+    savedField = this.field;
   }
 
   _setMines(field) {
@@ -192,33 +221,34 @@ class Field {
     for (let i = 0; i < this.mines; i++) {
       let row = Math.floor(Math.random() * this.numCells);
       let cell = Math.floor(Math.random() * this.numCells);
-      let existMine = minesArr.includes(field[row].children[cell]);
-      let existCell = checkedArr.includes(field[row].children[cell]);
+      let existMine = isExist(minesCoords, field[row].children[cell]);
+      let existCell = isExist(checkedArr, field[row].children[cell]);
 
-      while (existCell || existMine) {
+      let coords = [];
+
+      while (!!existCell || !!existMine) {
         row = Math.floor(Math.random() * this.numCells);
         cell = Math.floor(Math.random() * this.numCells);
-        existMine = minesArr.includes(field[row].children[cell]);
-        existCell = checkedArr.includes(field[row].children[cell]);
+        existMine = isExist(minesCoords, field[row].children[cell]);
+        existCell = isExist(checkedArr, field[row].children[cell]);
       }
-      minesArr.push(field[row].children[cell]);
+
+      coords.push(row, cell);
+      minesCoords.push(coords);
     }
-    // console.log(minesArr.length);
   }
 
   _setCellValue(field, cell, rowIndex, cellIndex) {
     let counter = 0;
     const soundBtn = document.querySelector('.head__sound');
     if (cell.classList.contains('cell_flag')) {
-      // flags += 1;
       return;
     }
     cell.classList.add('cell_open');
-    // cell.classList.remove('cell_flag');
 
-    if (minesArr.includes(cell)) {
+    if (isExist(minesCoords, cell)) {
       cell.style.backgroundColor = 'red';
-      minesArr.forEach((el) => el.classList.add('cell_bomb'));
+      minesCoords.forEach((c) => document.querySelector(`[data-x="${c[1]}"][data-y="${c[0]}"]`).classList.add('cell_bomb'));
       document.querySelector('.btn-restart').classList.add('btn-restart_lose');
       isLose = true;
       if (!soundBtn.classList.contains('head__sound_off')) {
@@ -228,28 +258,37 @@ class Field {
       return -1;
     }
 
+    const left = field[rowIndex].children[cellIndex - 1];
+    const right = field[rowIndex].children[cellIndex + 1];
+
     if (field[rowIndex - 1]) {
-      if (minesArr.includes(field[rowIndex - 1].children[cellIndex])) counter += 1;
-      if (minesArr.includes(field[rowIndex - 1].children[cellIndex + 1])) counter += 1;
-      if (minesArr.includes(field[rowIndex - 1].children[cellIndex - 1])) counter += 1;
+      const topLeft = field[rowIndex - 1].children[cellIndex - 1];
+      const topRight = field[rowIndex - 1].children[cellIndex + 1];
+      const top = field[rowIndex - 1].children[cellIndex];
+      if (isExist(minesCoords, top)) counter += 1;
+      if (topRight && isExist(minesCoords, topRight)) counter += 1;
+      if (topLeft && isExist(minesCoords, topLeft)) counter += 1;
     }
 
     if (field[rowIndex + 1]) {
-      if (minesArr.includes(field[rowIndex + 1].children[cellIndex])) counter += 1;
-      if (minesArr.includes(field[rowIndex + 1].children[cellIndex + 1])) counter += 1;
-      if (minesArr.includes(field[rowIndex + 1].children[cellIndex - 1])) counter += 1;
+      const botLeft = field[rowIndex + 1].children[cellIndex - 1];
+      const botRight = field[rowIndex + 1].children[cellIndex + 1];
+      const bot = field[rowIndex + 1].children[cellIndex];
+      if (isExist(minesCoords, bot)) counter += 1;
+      if (botLeft && isExist(minesCoords, botLeft)) counter += 1;
+      if (botRight && isExist(minesCoords, botRight)) counter += 1;
     }
 
-    if (minesArr.includes(field[rowIndex].children[cellIndex + 1])) counter += 1;
-    if (minesArr.includes(field[rowIndex].children[cellIndex - 1])) counter += 1;
+    if (left && isExist(minesCoords, left)) counter += 1;
+    if (right && isExist(minesCoords, right)) counter += 1;
 
     cell.dataset.col = counter;
     if (counter > 0) {
       cell.textContent = counter;
     }
 
-    if (!checkedArr.includes(cell)) {
-      checkedArr.push(cell);
+    if (!isExist(checkedArr, cell)) {
+      checkedArr.push([Number(cell.dataset.y), Number(cell.dataset.x)]);
     }
 
     return counter;
@@ -265,18 +304,18 @@ class Field {
       const topRight = field[rowIndex - 1].children[cellIndex + 1];
       const top = field[rowIndex - 1].children[cellIndex];
 
-      if (!minesArr.includes(top) && top && !top.dataset.col) {
+      if (top && !isExist(minesCoords, top) && !top.dataset.col) {
         counter = this._setCellValue(field, top, rowIndex - 1, cellIndex);
         if (counter === 0 && !cell.dataset.prev) {
           cell.dataset.prev = true;
           this._openNearCells(field, top, rowIndex - 1, cellIndex);
         }
       }
-      if (!minesArr.includes(topRight) && topRight && !topRight.dataset.col) {
+      if (topRight && !isExist(minesCoords, topRight) && !topRight.dataset.col) {
         counter = this._setCellValue(field, topRight, rowIndex - 1, cellIndex + 1);
         if (counter === 0) this._openNearCells(field, topRight, rowIndex - 1, cellIndex + 1);
       }
-      if (!minesArr.includes(topLeft) && topLeft && !topLeft.dataset.col) {
+      if (topLeft && !isExist(minesCoords, topLeft) && !topLeft.dataset.col) {
         counter = this._setCellValue(field, topLeft, rowIndex - 1, cellIndex - 1);
         if (counter === 0) this._openNearCells(field, topLeft, rowIndex - 1, cellIndex - 1);
       }
@@ -287,28 +326,28 @@ class Field {
       const botRight = field[rowIndex + 1].children[cellIndex + 1];
       const bot = field[rowIndex + 1].children[cellIndex];
 
-      if (!minesArr.includes(bot) && bot && !bot.dataset.col) {
+      if (bot && !isExist(minesCoords, bot) && !bot.dataset.col) {
         counter = this._setCellValue(field, bot, rowIndex + 1, cellIndex);
         if (counter === 0 && !cell.dataset.prev) {
           cell.dataset.prev = true;
           this._openNearCells(field, bot, rowIndex + 1, cellIndex);
         }
       }
-      if (!minesArr.includes(botRight) && botRight && !botRight.dataset.col) {
+      if (botRight && !isExist(minesCoords, botRight) && !botRight.dataset.col) {
         counter = this._setCellValue(field, botRight, rowIndex + 1, cellIndex + 1);
         if (counter === 0) this._openNearCells(field, botRight, rowIndex + 1, cellIndex + 1);
       }
-      if (!minesArr.includes(botLeft) && botLeft && !botLeft.dataset.col) {
+      if (botLeft && !isExist(minesCoords, botLeft) && !botLeft.dataset.col) {
         counter = this._setCellValue(field, botLeft, rowIndex + 1, cellIndex - 1);
         if (counter === 0) this._openNearCells(field, botLeft, rowIndex + 1, cellIndex - 1);
       }
     }
 
-    if (!minesArr.includes(right) && right && !right.dataset.col) {
+    if (right && !isExist(minesCoords, right) && !right.dataset.col) {
       counter = this._setCellValue(field, right, rowIndex, cellIndex + 1);
       if (counter === 0) this._openNearCells(field, right, rowIndex, cellIndex + 1);
     }
-    if (!minesArr.includes(left) && left && !left.dataset.col) {
+    if (left && !isExist(minesCoords, left) && !left.dataset.col) {
       counter = this._setCellValue(field, left, rowIndex, cellIndex - 1);
       if (counter === 0) this._openNearCells(field, left, rowIndex, cellIndex - 1);
     }
@@ -332,15 +371,60 @@ class Field {
 }
 
 let mouse = false;
-let checkedArr = [];
-let minesArr = [];
-let firstClick = true;
-let isLose = false;
+let checkedArr = JSON.parse(localStorage.getItem('checkedArr')) || [];
+let minesCoords = JSON.parse(localStorage.getItem('minesCoords')) || [];
+let savedField = getField('field') || null;
+let firstClick = localStorage.getItem('firstClick') === 'true' ? true : false;
+let isLose = localStorage.getItem('isLose') === 'true' ? true : false;
+let isWin = localStorage.getItem('isWin') === 'true' ? true : false;
 let prevClickUp;
-let isWin = false;
-let clicksCounter = 0;
-let secondsCounter = 0;
+let clicksCounter = Number(localStorage.getItem('clicksCounter')) || 0;
+let secondsCounter = Number(localStorage.getItem('secondsCounter')) || 0;
 let secondsInterval;
-let flags;
+let flags = Number(localStorage.getItem('flags')) || 0;
+let isSaved = localStorage.getItem('isSaved') === 'true' ? true : false;
+
+window.addEventListener('beforeunload', () => {
+  if (!isLose && !isWin && !firstClick) {
+    isSaved = true;
+    localStorage.setItem('checkedArr', JSON.stringify(checkedArr));
+    localStorage.setItem('minesCoords', JSON.stringify(minesCoords));
+    saveField(savedField);
+    localStorage.setItem('firstClick', firstClick);
+    localStorage.setItem('clicksCounter', clicksCounter);
+    localStorage.setItem('secondsCounter', secondsCounter);
+    localStorage.setItem('flags', flags);
+    localStorage.setItem('isWin', isWin);
+    localStorage.setItem('isLose', isLose);
+    localStorage.setItem('isSaved', isSaved);
+  } else {
+    isSaved = false;
+    localStorage.removeItem('checkedArr');
+    localStorage.removeItem('minesCoords');
+    localStorage.removeItem('field');
+    localStorage.removeItem('firstClick', false);
+    localStorage.removeItem('clicksCounter', 0);
+    localStorage.removeItem('secondsCounter', 0);
+    localStorage.removeItem('flags', flags);
+    localStorage.removeItem('isWin', isWin);
+    localStorage.removeItem('isLose', isLose);
+    localStorage.setItem('isSaved', isSaved);
+  }
+});
+
+function saveField(field) {
+  if (field) localStorage.setItem('field', field.outerHTML);
+}
+
+function getField() {
+  const strField = localStorage.getItem('field');
+  const field = document.createElement('div');
+  field.innerHTML = strField;
+  return field.firstChild;
+}
+
+function isExist(checkArr, cell) {
+  return checkArr.find((c) => Number(c[0]) === Number(cell.dataset.y) && Number(c[1]) === Number(cell.dataset.x)) || false;
+}
 
 export { Field };

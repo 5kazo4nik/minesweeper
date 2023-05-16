@@ -104,7 +104,7 @@ class Game {
       inputMines.value = 99;
     }
 
-    builderField = new Field(fieldSize, mines, isChange);
+    builderField = new Field(fieldSize, mines, isChange, false);
     const newField = builderField.build();
     document.querySelector('.game__content').replaceWith(newField);
     isChange = false;
@@ -142,7 +142,7 @@ class Game {
     }
     e.target.value = mines;
     isChange = true;
-    const builderField = new Field(Number(select.value), mines, isChange);
+    const builderField = new Field(Number(select.value), mines, isChange, false);
     const newField = builderField.build();
     document.querySelector('.game__content').replaceWith(newField);
     isChange = false;
