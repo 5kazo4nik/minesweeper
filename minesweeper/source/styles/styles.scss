@@ -255,6 +255,10 @@ select {
 
 // ////////////////////////
 
+.result {
+  box-sizing: border-box;
+}
+
 .game__result {
   margin: 20px 30px;
   padding: 10px 0 20px 0;

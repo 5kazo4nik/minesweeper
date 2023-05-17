@@ -10,5 +10,7 @@ import { Game } from './createGame';
 // console.log(gameField.build());
 // console.log(options.build());
 
-const game = new Game();
-game.build();
+window.addEventListener('DOMContentLoaded', () => {
+  const game = new Game();
+  game.build();
+});

@@ -1,5 +1,6 @@
 import { Field } from './createField';
 import { Options } from './createOpt';
+import { setScore } from './setScore';
 import { createNode, insertNode } from './useNode';
 
 class Game {
@@ -22,40 +23,48 @@ class Game {
     this.options = builderOptions.build();
     this.field = builderField.build();
 
-    this.gameResult = createNode('div', 'game__result');
-    this.result = createNode('div', 'result');
-    this.heading = createNode('h2', 'result__heading');
-    this.list = createNode('ol', 'result__list');
+    if (score.length > 0) {
+      this.gameResult = createNode('div', 'game__result');
+      this.result = createNode('div', 'result');
+      this.heading = createNode('h2', 'result__heading');
+      this.list = createNode('ol', 'result__list');
+    }
   }
 
   _appendElements() {
-    for (let i = 0; i < 10; i++) {
-      const item = createNode('li', 'result__item');
-      insertNode(this.list, item);
-    }
+    if (score.length > 0) {
+      for (let i = 0; i < score.length; i++) {
+        const item = createNode('li', 'result__item');
+        insertNode(this.list, item);
+      }
 
-    insertNode(this.heading, 'Score');
-    insertNode(this.result, this.heading);
-    insertNode(this.result, this.list);
-    insertNode(this.gameResult, this.result);
+      insertNode(this.heading, 'Score');
+      insertNode(this.result, this.heading);
+      insertNode(this.result, this.list);
+      insertNode(this.gameResult, this.result);
+    }
 
     insertNode(this.game, this.options);
     insertNode(this.game, this.field);
-    insertNode(this.game, this.gameResult);
+    if (score.length > 0) insertNode(this.game, this.gameResult);
 
     insertNode(this.main, this.game);
     insertNode(document.body, this.bg);
     insertNode(document.body, this.main);
+
+    this._setScore();
   }
 
   _bindEvents() {
     this.game.addEventListener('contextmenu', (e) => e.preventDefault());
 
     const select = document.querySelector('.head__size');
-    select.addEventListener('input', this._changeLevel);
+    const changeLevel = this._changeLevel.bind(this);
+    select.addEventListener('input', changeLevel);
 
     const input = document.querySelector('.head__mines');
-    input.addEventListener('change', this._changeMines);
+    const changeMines = this._changeMines.bind(this);
+    input.addEventListener('change', changeMines);
 
     const themeBtn = document.querySelector('.head__theme');
     themeBtn.addEventListener('click', this._switchTheme);
@@ -79,6 +88,14 @@ class Game {
       localStorage.setItem('mines', mines);
       localStorage.setItem('fieldSize', fieldSize);
     });
+  }
+
+  // /////////////////////////////////////////
+
+  _setScore() {
+    if (score.length) {
+      setScore(score, clicksCounter, secondsCounter, mines, flags, fieldSize);
+    }
   }
 
   _changeLevel(e) {
@@ -108,6 +125,7 @@ class Game {
     const newField = builderField.build();
     document.querySelector('.game__content').replaceWith(newField);
     isChange = false;
+    this._setScore();
   }
 
   _changeMines(e) {
@@ -146,6 +164,7 @@ class Game {
     const newField = builderField.build();
     document.querySelector('.game__content').replaceWith(newField);
     isChange = false;
+    this._setScore();
   }
 
   _switchTheme(e) {
@@ -186,5 +205,10 @@ let isChange = false;
 let isDark = localStorage.getItem('isDark') === 'true' ? true : false;
 let mines = Number(localStorage.getItem('mines')) || 10;
 let fieldSize = Number(localStorage.getItem('fieldSize')) || 10;
+
+const score = JSON.parse(localStorage.getItem('score')) || [];
+const clicksCounter = Number(localStorage.getItem('clicksCounter')) || 0;
+const secondsCounter = Number(localStorage.getItem('secondsCounter')) || 0;
+const flags = Number(localStorage.getItem('flags')) || 0;
 
 export { Game };

@@ -1,5 +1,6 @@
 import { Modal } from './modal';
 import { playSound } from './playSound';
+import { setScore } from './setScore';
 import { createNode, insertNode } from './useNode';
 
 class Field {
@@ -214,6 +215,10 @@ class Field {
       savedField = null;
       isSaved = false;
     }
+
+    if (isWin) {
+      this._setScore();
+    }
     savedField = this.field;
   }
 
@@ -369,6 +374,20 @@ class Field {
       this.duration.textContent = totalSeconds;
     }, 1000);
   }
+
+  _setScore() {
+    setScore(score, clicksCounter, secondsCounter, this.mines, flags, this.numCells, isWin);
+    // if (isWin) score.unshift(`Steps: ${clicksCounter}. Time: ${secondsCounter} seconds. Flags: ${this.mines - flags}. Field: ${this.numCells}x${this.numCells}. Mines: ${this.mines}`);
+    // if (score.length > 10) score.pop();
+    // const list = Array.from(document.querySelectorAll('.result__item'));
+    // const fieldStyle = getComputedStyle(this.field);
+    // const result = document.querySelector('.result');
+    // result.style.width = `${fieldStyle.width}`;
+    // console.log(fieldStyle.width);
+    // score.forEach((el, index) => {
+    //   list[index].textContent = el;
+    // });
+  }
 }
 
 let mouse = false;
@@ -384,6 +403,7 @@ let secondsCounter = Number(localStorage.getItem('secondsCounter')) || 0;
 let secondsInterval;
 let flags = Number(localStorage.getItem('flags')) || 0;
 let isSaved = localStorage.getItem('isSaved') === 'true' ? true : false;
+let score = JSON.parse(localStorage.getItem('score')) || [];
 
 window.addEventListener('beforeunload', () => {
   if (!isLose && !isWin && !firstClick) {
@@ -410,6 +430,7 @@ window.addEventListener('beforeunload', () => {
     localStorage.removeItem('isWin', isWin);
     localStorage.removeItem('isLose', isLose);
     localStorage.setItem('isSaved', isSaved);
+    if (isWin) localStorage.setItem('score', JSON.stringify(score));
   }
 });
 
