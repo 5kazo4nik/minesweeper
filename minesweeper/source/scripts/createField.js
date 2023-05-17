@@ -169,14 +169,6 @@ class Field {
     const cellIndex = [...curRow.children].indexOf(e.target);
     const soundBtn = document.querySelector('.head__sound');
 
-    if (firstClick) {
-      if (e.button !== 2) {
-        checkedArr.push([Number(e.target.dataset.y), Number(e.target.dataset.x)]);
-      }
-      secondsInterval = this._setSecondsInterval();
-      this._setMines(field);
-    }
-
     if (e.button === 2) {
       if (e.target.classList.contains('cell_flag')) {
         flags += 1;
@@ -190,6 +182,15 @@ class Field {
       if (!soundBtn.classList.contains('head__sound_off')) playSound('../assets/sound/Флажок.mp3', 0.3);
       return;
     }
+
+    if (firstClick) {
+      if (e.button !== 2) {
+        checkedArr.push([Number(e.target.dataset.y), Number(e.target.dataset.x)]);
+      }
+      secondsInterval = this._setSecondsInterval();
+      this._setMines(field);
+    }
+
     if (e.target.classList.contains('cell_flag')) {
       return;
     }
