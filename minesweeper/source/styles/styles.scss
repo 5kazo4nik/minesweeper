@@ -2,10 +2,282 @@
   transition: 0.5s ease-in-out;
 }
 
-$color-primery: rgb(187, 187, 187);
-$color-primery-l: rgb(208, 208, 208);
-$color-border-d: rgb(156, 156, 156);
-$color-border-l: rgb(229, 228, 226);
+$color-default: rgba(233, 152, 111, 0.959);
+$color-default-l: rgb(255, 164, 116);
+$color-default-border-d: rgb(235, 108, 62);
+$color-default-border-l: rgb(255, 204, 153);
+
+$color-summer: rgba(187, 187, 187, 0.945);
+$color-summer-l: rgb(208, 208, 208);
+$color-summer-border-d: rgb(156, 156, 156);
+$color-summer-border-l: rgb(229, 228, 226);
+
+$color-spring: rgba(91, 201, 131, 0.932);
+$color-spring-l: rgb(48, 186, 143);
+$color-spring-border-d: rgb(50, 148, 64);
+$color-spring-border-l: rgb(208, 240, 192);
+
+$color-winter: rgba(0, 191, 255, 0.945);
+$color-winter-l: rgb(204, 204, 255);
+$color-winter-border-d: rgb(20, 146, 230);
+$color-winter-border-l: rgb(74, 174, 245);
+
+$color-dark: rgba(13, 9, 63, 0.925);
+$color-dark-l: rgb(34, 19, 95);
+$color-dark-border-d: rgb(77, 0, 77);
+$color-dark-border-l: rgb(73, 52, 158);
+
+.head__opt,
+.count,
+.field,
+.result,
+.modal__window {
+  border-top: 4px solid $color-default-border-d;
+  border-left: 4px solid $color-default-border-d;
+  border-right: 4px solid $color-default-border-l;
+  border-bottom: 4px solid $color-default-border-l;
+}
+.head__opt_summer,
+.count_summer,
+.field_summer,
+.result_summer,
+.modal__window_summer {
+  border-top: 4px solid $color-summer-border-d;
+  border-left: 4px solid $color-summer-border-d;
+  border-right: 4px solid $color-summer-border-l;
+  border-bottom: 4px solid $color-summer-border-l;
+}
+.head__opt_summer,
+.count_summer,
+.field_summer,
+.result_summer,
+.modal__window_summer {
+  border-top: 4px solid $color-summer-border-d;
+  border-left: 4px solid $color-summer-border-d;
+  border-right: 4px solid $color-summer-border-l;
+  border-bottom: 4px solid $color-summer-border-l;
+}
+.head__opt_spring,
+.count_spring,
+.field_spring,
+.result_spring,
+.modal__window_spring {
+  border-top: 4px solid $color-spring-border-d;
+  border-left: 4px solid $color-spring-border-d;
+  border-right: 4px solid $color-spring-border-l;
+  border-bottom: 4px solid $color-spring-border-l;
+}
+.head__opt_winter,
+.count_winter,
+.field_winter,
+.result_winter,
+.modal__window_winter {
+  border-top: 4px solid $color-winter-border-d;
+  border-left: 4px solid $color-winter-border-d;
+  border-right: 4px solid $color-winter-border-l;
+  border-bottom: 4px solid $color-winter-border-l;
+}
+.head__opt_dark,
+.count_dark,
+.field_dark,
+.result_dark,
+.modal__window_dark {
+  border-top: 4px solid $color-dark-border-d;
+  border-left: 4px solid $color-dark-border-d;
+  border-right: 4px solid $color-dark-border-l;
+  border-bottom: 4px solid $color-dark-border-l;
+  color: #fff;
+}
+
+.btn-restart,
+.cell {
+  border-right: 3px solid $color-default-border-d;
+  border-bottom: 3px solid $color-default-border-d;
+  border-top: 3px solid $color-default-border-l;
+  border-left: 3px solid $color-default-border-l;
+}
+.btn-restart_summer,
+.cell_summer {
+  border-right: 3px solid $color-summer-border-d;
+  border-bottom: 3px solid $color-summer-border-d;
+  border-top: 3px solid $color-summer-border-l;
+  border-left: 3px solid $color-summer-border-l;
+}
+.btn-restart_spring,
+.cell_spring {
+  border-right: 3px solid $color-spring-border-d;
+  border-bottom: 3px solid $color-spring-border-d;
+  border-top: 3px solid $color-spring-border-l;
+  border-left: 3px solid $color-spring-border-l;
+}
+.btn-restart_winter,
+.cell_winter {
+  border-right: 3px solid $color-winter-border-d;
+  border-bottom: 3px solid $color-winter-border-d;
+  border-top: 3px solid $color-winter-border-l;
+  border-left: 3px solid $color-winter-border-l;
+}
+.btn-restart_dark,
+.cell_dark {
+  border-right: 3px solid $color-dark-border-d;
+  border-bottom: 3px solid $color-dark-border-d;
+  border-top: 3px solid $color-dark-border-l;
+  border-left: 3px solid $color-dark-border-l;
+  color: #fff;
+}
+
+.btn-restart {
+  &_active {
+    border-left: 3px solid $color-default-border-d;
+    border-top: 3px solid $color-default-border-d;
+    border-bottom: 3px solid $color-default-border-l;
+    border-right: 3px solid $color-default-border-l;
+  }
+}
+.btn-restart_summer.btn-restart_active {
+  border-left: 3px solid $color-summer-border-d;
+  border-top: 3px solid $color-summer-border-d;
+  border-bottom: 3px solid $color-summer-border-l;
+  border-right: 3px solid $color-summer-border-l;
+}
+.btn-restart_spring.btn-restart_active {
+  border-left: 3px solid $color-spring-border-d;
+  border-top: 3px solid $color-spring-border-d;
+  border-bottom: 3px solid $color-spring-border-l;
+  border-right: 3px solid $color-spring-border-l;
+}
+.btn-restart_winter.btn-restart_active {
+  border-left: 3px solid $color-winter-border-d;
+  border-top: 3px solid $color-winter-border-d;
+  border-bottom: 3px solid $color-winter-border-l;
+  border-right: 3px solid $color-winter-border-l;
+}
+.btn-restart_dark.btn-restart_active {
+  border-left: 3px solid $color-dark-border-d;
+  border-top: 3px solid $color-dark-border-d;
+  border-bottom: 3px solid $color-dark-border-l;
+  border-right: 3px solid $color-dark-border-l;
+  color: #fff;
+}
+
+.cell {
+  background-color: $color-default-l;
+
+  &_active {
+    border-right: 3px solid rgba(156, 156, 156, 0);
+    border-bottom: 3px solid rgba(156, 156, 156, 0);
+    border-top: 3px solid $color-default-border-d;
+    border-left: 3px solid $color-default-border-d;
+  }
+
+  &_open {
+    background-color: $color-default;
+    border-right: 3px solid rgba(156, 156, 156, 0);
+    border-bottom: 3px solid rgba(156, 156, 156, 0);
+    border-top: 3px solid rgba(156, 156, 156, 0);
+    border-left: 3px solid rgba(156, 156, 156, 0);
+    outline: 1px solid $color-default-border-d;
+    outline-offset: -1px;
+  }
+}
+
+.cell_summer {
+  background-color: $color-summer-l;
+}
+.cell_spring {
+  background-color: $color-spring-l;
+}
+.cell_winter {
+  background-color: $color-winter-l;
+}
+.cell_dark {
+  background-color: $color-dark-l;
+}
+
+.cell_summer.cell_active {
+  border-top: 3px solid $color-summer-border-d;
+  border-left: 3px solid $color-summer-border-d;
+}
+.cell_spring.cell_active {
+  border-top: 3px solid $color-spring-border-d;
+  border-left: 3px solid $color-spring-border-d;
+}
+.cell_winter.cell_active {
+  border-top: 3px solid $color-winter-border-d;
+  border-left: 3px solid $color-winter-border-d;
+}
+.cell_dark.cell_active {
+  border-top: 3px solid $color-winter-border-d;
+  border-left: 3px solid $color-dark-border-d;
+}
+
+.cell_summer.cell_open {
+  outline: 1px solid $color-summer-border-d;
+}
+.cell_spring.cell_open {
+  outline: 1px solid $color-spring-border-d;
+}
+.cell_winter.cell_open {
+  outline: 1px solid $color-winter-border-d;
+}
+.cell_dark.cell_open {
+  outline: 1px solid $color-dark-border-d;
+}
+
+.game {
+  background-color: $color-default;
+
+  &_summer {
+    background-color: $color-summer;
+  }
+  &_spring {
+    background-color: $color-spring;
+  }
+  &_winter {
+    background-color: $color-winter;
+  }
+  &_dark {
+    background-color: $color-dark;
+  }
+}
+
+.modal__window {
+  background-color: $color-default;
+
+  &_summer {
+    background-color: $color-summer;
+  }
+  &_spring {
+    background-color: $color-spring;
+  }
+  &_winter {
+    background-color: $color-winter;
+  }
+  &_dark {
+    background-color: $color-dark;
+    color: #fff;
+  }
+}
+
+.result__item {
+  border-top: 2px solid $color-default-border-d;
+
+  &_summer {
+    border-top: 2px solid $color-summer-border-d;
+  }
+  &_spring {
+    border-top: 2px solid $color-spring-border-d;
+  }
+  &_winter {
+    border-top: 2px solid $color-winter-border-d;
+  }
+  &_dark {
+    border-top: 2px solid $color-dark-border-d;
+    color: #fff;
+  }
+}
+
+// ///////////////////////////////////////////////////
 
 html {
   display: flex;
@@ -14,18 +286,11 @@ html {
 }
 
 .body {
-  // min-height: 850px;
   font-size: 18px;
   font-family: 'Roboto', sans-serif;
   margin: 0;
   position: relative;
-  // background-image: url('../assets/gif/I6HiT.gif');
-  // background-repeat: no-repeat;
-  // background-size: cover;
   @extend %transition;
-  // &_dark {
-  //   background-image: url('../assets/gif/image051-8.gif');
-  // }
 }
 
 input,
@@ -38,7 +303,7 @@ select {
   width: 100%;
   height: 100%;
   position: fixed;
-  background-image: url('../assets/gif/I6HiT.gif');
+  background-image: url('../assets/gif/осень.gif');
   background-repeat: no-repeat;
   background-size: cover;
   z-index: -1;
@@ -46,16 +311,24 @@ select {
   &_dark {
     background-image: url('../assets/gif/image051-8.gif');
   }
+
+  &_winter {
+    background-image: url('../assets/gif/зима.gif');
+  }
+
+  &_spring {
+    background-image: url('../assets/gif/весна.gif');
+  }
+
+  &_summer {
+    background-image: url('../assets/gif/лето.gif');
+  }
 }
 
 .game {
   margin: 100px auto 0 auto;
-  // max-width: 327px;
-  // max-width: 457px;
-  // max-width: 717px;
   max-width: fit-content;
-  background-color: $color-primery;
-  border-radius: 50px;
+  border-radius: 20px;
   @extend %transition;
 }
 
@@ -71,20 +344,6 @@ select {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-
-  // padding: 20px 0 15px 0;
-  // margin: 0 30px;
-}
-
-.head__opt,
-.count,
-.game__field,
-.result,
-.modal__window {
-  border-top: 4px solid $color-border-d;
-  border-left: 4px solid $color-border-d;
-  border-right: 4px solid $color-border-l;
-  border-bottom: 4px solid $color-border-l;
 }
 
 .head__inputs {
@@ -110,12 +369,24 @@ select {
   @extend %transition;
   width: 30px;
   height: 30px;
-  background-image: url('../assets/svg/mbrisun2_99594.svg');
+  background-image: url('../assets/svg/tree_autumn.svg');
   background-size: cover;
   cursor: pointer;
 
   &_dark {
     background-image: url('../assets/svg/halfmoon_102699.svg');
+  }
+
+  &_winter {
+    background-image: url('../assets/svg/tree_winter.svg');
+  }
+
+  &_spring {
+    background-image: url('../assets/svg/tree_summer.svg');
+  }
+
+  &_summer {
+    background-image: url('../assets/svg/tree_spring.svg');
   }
 }
 
@@ -153,14 +424,6 @@ select {
   font-size: 22px;
 }
 
-.btn-restart,
-.cell {
-  border-right: 3px solid $color-border-d;
-  border-bottom: 3px solid $color-border-d;
-  border-top: 3px solid $color-border-l;
-  border-left: 3px solid $color-border-l;
-}
-
 .btn-restart {
   margin: 0 auto 10px auto;
   width: 35px;
@@ -174,13 +437,6 @@ select {
 
   &_lose {
     background-image: url('../assets/svg/2369366-emoticon-face-mute-smiley_85428.svg');
-  }
-
-  &_active {
-    border-left: 3px solid $color-border-d;
-    border-top: 3px solid $color-border-d;
-    border-bottom: 3px solid $color-border-l;
-    border-right: 3px solid $color-border-l;
   }
 }
 
@@ -200,31 +456,12 @@ select {
   max-height: 20px;
   min-width: 10px;
   min-height: 10px;
-  background-color: $color-primery-l;
   display: flex;
   justify-content: center;
   text-align: center;
   font-weight: bold;
 
-  &_active {
-    border-right: 3px solid rgba(156, 156, 156, 0);
-    border-bottom: 3px solid rgba(156, 156, 156, 0);
-    border-top: 3px solid $color-border-d;
-    border-left: 3px solid $color-border-d;
-  }
-
-  &_open {
-    background-color: $color-primery;
-    border-right: 3px solid rgba(156, 156, 156, 0);
-    border-bottom: 3px solid rgba(156, 156, 156, 0);
-    border-top: 3px solid rgba(156, 156, 156, 0);
-    border-left: 3px solid rgba(156, 156, 156, 0);
-    outline: 1px solid $color-border-d;
-    outline-offset: -1px;
-  }
-
   &_bomb {
-    // background-color: red;
     background-image: url('../assets/svg/bomb_icon_136879.svg');
     background-position: center;
     background-size: cover;
@@ -270,6 +507,14 @@ select {
 
 .result__list {
   margin: 0 0 10px 0;
+  list-style: none;
+  padding: 0;
+  text-align: center;
+}
+
+.result__item {
+  font-size: 16px;
+  padding: 5px 5px;
 }
 
 // /////////////////////////
@@ -291,11 +536,11 @@ select {
 }
 
 [data-col='5'] {
-  color: darkblue;
+  color: rgb(221, 133, 0);
 }
 
 [data-col='6'] {
-  color: darkmagenta;
+  color: rgb(3, 241, 3);
 }
 
 [data-col='7'] {
@@ -321,7 +566,6 @@ select {
   left: 50%;
   top: 5px;
   transform: translateX(-50%);
-  background-color: $color-primery;
 }
 
 .modal__heading {
@@ -332,6 +576,7 @@ select {
 .modal__text {
   text-align: center;
   margin: 0;
+  font-size: 16px;
 }
 
 .modal__img {

@@ -1,6 +1,7 @@
 import { Field } from './createField';
 import { Options } from './createOpt';
 import { setScore } from './setScore';
+import { switchTheme } from './switchTheme';
 import { createNode, insertNode } from './useNode';
 
 class Game {
@@ -8,6 +9,8 @@ class Game {
     this._createElements();
     this._appendElements();
     this._bindEvents();
+    // this._switchTheme()
+    switchTheme(false);
     playBg();
   }
 
@@ -60,14 +63,24 @@ class Game {
 
     const select = document.querySelector('.head__size');
     const changeLevel = this._changeLevel.bind(this);
-    select.addEventListener('input', changeLevel);
+    select.addEventListener('input', (e) => {
+      changeLevel(e);
+      switchTheme(false);
+    });
 
     const input = document.querySelector('.head__mines');
     const changeMines = this._changeMines.bind(this);
-    input.addEventListener('change', changeMines);
+    input.addEventListener('change', (e) => {
+      changeMines(e);
+      switchTheme(false);
+    });
 
     const themeBtn = document.querySelector('.head__theme');
-    themeBtn.addEventListener('click', this._switchTheme);
+    themeBtn.addEventListener('click', () => {
+      switchTheme(true);
+      theme = Number(localStorage.getItem('theme')) || 0;
+      playBg();
+    });
 
     const soundBtn = document.querySelector('.head__sound');
     soundBtn.addEventListener('click', (e) => {
@@ -103,19 +116,16 @@ class Game {
     let builderField;
     const inputMines = document.querySelector('.head__mines');
     if (e.target.value === '10') {
-      // builderField = new Field(10, 10, isChange);
       fieldSize = 10;
       mines = 10;
       inputMines.value = 10;
     }
     if (e.target.value === '15') {
-      // builderField = new Field(15, 40, isChange);
       fieldSize = 15;
       mines = 40;
       inputMines.value = 40;
     }
     if (e.target.value === '25') {
-      // builderField = new Field(25, 100, isChange);
       fieldSize = 25;
       mines = 99;
       inputMines.value = 99;
@@ -131,26 +141,6 @@ class Game {
   _changeMines(e) {
     const value = Number(e.target.value);
     const select = document.querySelector('.head__size');
-    // let mines;
-    // if (select.value === '10') {
-    //   if (value > 99) {
-    //     mines = 99;
-    //   } else {
-    //     mines = value;
-    //   }
-    // } else if (select.value === '15') {
-    //   if (value > 224) {
-    //     mines = 224;
-    //   } else {
-    //     mines = value;
-    //   }
-    // } else if (select.value === '25') {
-    //   if (value > 624) {
-    //     mines = 624;
-    //   } else {
-    //     mines = value;
-    //   }
-    // }
     if (value > 99) {
       mines = 99;
     } else if (value < 10) {
@@ -166,30 +156,25 @@ class Game {
     isChange = false;
     this._setScore();
   }
-
-  _switchTheme(e) {
-    const bg = document.querySelector('.bg-gif');
-    bg.classList.toggle('bg-gif_dark');
-    e.target.classList.toggle('head__theme_dark');
-    isDark = !isDark;
-    playBg();
-  }
 }
 
-// function playBg() {
-//   if (isDark) {
-//     playSound('../assets/sound/Костер.mp3', 0.1);
-//   } else {
-//     playSound('../assets/sound/Вода.mp3', 0.1);
-//   }
-// }
 function playBg() {
   const soundBtn = document.querySelector('.head__sound');
   if (!soundBtn.classList.contains('head__sound_off')) {
-    if (isDark) {
-      audioBg.src = '../assets/sound/Костер.mp3';
-    } else {
+    if (theme === 0) {
       audioBg.src = '../assets/sound/Вода.mp3';
+    }
+    if (theme === 1) {
+      audioBg.src = '../assets/sound/колокольчики.mp3';
+    }
+    if (theme === 2) {
+      audioBg.src = '../assets/sound/птицы.mp3';
+    }
+    if (theme === 3) {
+      audioBg.src = '../assets/sound/ветер.mp3';
+    }
+    if (theme === 4) {
+      audioBg.src = '../assets/sound/Костер.mp3';
     }
     audioBg.autoplay = true;
     audioBg.currentTime = 0;
@@ -210,5 +195,8 @@ const score = JSON.parse(localStorage.getItem('score')) || [];
 const clicksCounter = Number(localStorage.getItem('clicksCounter')) || 0;
 const secondsCounter = Number(localStorage.getItem('secondsCounter')) || 0;
 const flags = Number(localStorage.getItem('flags')) || 0;
+
+let theme = Number(localStorage.getItem('theme')) || 0;
+// const themeArr = ['', '_winter', '_spring', '_summer', '_dark'];
 
 export { Game };

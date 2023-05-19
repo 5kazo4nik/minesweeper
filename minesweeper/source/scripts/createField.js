@@ -1,6 +1,7 @@
 import { Modal } from './modal';
 import { playSound } from './playSound';
 import { setScore } from './setScore';
+import { switchTheme } from './switchTheme';
 import { createNode, insertNode } from './useNode';
 
 class Field {
@@ -131,6 +132,7 @@ class Field {
       this._appendELements();
       this._updateFlags();
       document.querySelector('.game__content').replaceWith(this.gameContent);
+      switchTheme(false);
     }
 
     if (e.target.classList.contains('cell')) {
@@ -212,6 +214,7 @@ class Field {
     if (isWin || isLose) {
       const modal = new Modal(isWin, isLose, secondsCounter, clicksCounter);
       document.body.prepend(modal.build());
+      switchTheme(false);
       savedField = null;
       isSaved = false;
     }
@@ -377,6 +380,7 @@ class Field {
 
   _setScore() {
     setScore(score, clicksCounter, secondsCounter, this.mines, flags, this.numCells, isWin);
+    switchTheme(false);
     // if (isWin) score.unshift(`Steps: ${clicksCounter}. Time: ${secondsCounter} seconds. Flags: ${this.mines - flags}. Field: ${this.numCells}x${this.numCells}. Mines: ${this.mines}`);
     // if (score.length > 10) score.pop();
     // const list = Array.from(document.querySelectorAll('.result__item'));

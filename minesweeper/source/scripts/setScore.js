@@ -7,13 +7,11 @@ export function setScore(score, cliks, seconds, mines, flags, fieldSize, isWin =
 
   const cell = document.querySelector('.cell');
   const list = Array.from(document.querySelectorAll('.result__item'));
-  console.log(score.length);
   const cellStyle = getComputedStyle(cell);
   const result = document.querySelector('.result');
   const cellWidth = cellStyle.width;
   result.style.width = `${cellWidth.slice(0, cellWidth.length - 2) * fieldSize + 6 * fieldSize}px`;
   score.forEach((el, index) => {
-    console.log(list[index]);
     list[index].textContent = el;
   });
 }
