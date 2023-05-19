@@ -4,16 +4,18 @@ import { setScore } from './setScore';
 import { switchTheme } from './switchTheme';
 import { createNode, insertNode } from './useNode';
 
+// Класс создания поля
 class Field {
-  constructor(num, mines, isChange, save = null) {
+  constructor(num, mines, isChange, save = true) {
     this.numCells = num;
     this.mines = mines;
     this.isChange = isChange;
     this.save = save;
   }
 
+  // Генерирует поле и возвращает обертку.
   build() {
-    if (this.save !== null) {
+    if (!this.save) {
       isSaved = false;
       savedField = null;
     }
@@ -24,6 +26,7 @@ class Field {
     return this.gameContent;
   }
 
+  // Создает ячейки и добавляет им нужные классы и атрибуты, возвращает обертку если нет сохраненного поля.
   _createCells() {
     if (!savedField) {
       const field = createNode('div', 'game__field', 'field');
@@ -82,6 +85,7 @@ class Field {
     insertNode(this.gameContent, this.field);
   }
 
+  // Обновляет флаги если игра не сохранена.
   _updateFlags() {
     if (!isSaved) {
       firstClick = true;
@@ -102,12 +106,12 @@ class Field {
   }
 
   _bindEvents() {
-    document.addEventListener('dragstart', (e) => e.preventDefault());
+    document.addEventListener('dragstart', (e) => e.preventDefault()); // Запрещает перетаскивать элементы
     document.addEventListener('mouseover', this._hoverOn);
     document.addEventListener('mousedown', this._clickDown);
 
     if (this.isChange) {
-      document.removeEventListener('mouseup', prevClickUp);
+      document.removeEventListener('mouseup', prevClickUp); // Нужно для удаления слушателя с предыдущего поля
     }
     const clickUp = this._clickUp.bind(this);
     prevClickUp = clickUp;
@@ -116,14 +120,17 @@ class Field {
 
   // ///////////////////////////////////////////////////////////////////////
 
+  // Слушатель при событии mouseDown
   _clickDown(e) {
     mouse = true;
     if (e.target.classList.contains('cell')) e.target.classList.add('cell_active');
     if (e.target.classList.contains('btn-restart')) e.target.classList.add('btn-restart_active');
   }
 
+  // Слушатель при событии mouseUp
   _clickUp(e) {
     mouse = false;
+    // Пересоздает элементы, удаляет сохраненное поле, убирает флаг сохранения, заменяет текущее поле на новое и оставляет текущую тему.
     if (e.target.classList.contains('btn-restart')) {
       savedField = null;
       isSaved = false;
@@ -135,6 +142,7 @@ class Field {
       switchTheme(false);
     }
 
+    // При клике по ячейке если конец игры то останавливает счет секунд.
     if (e.target.classList.contains('cell')) {
       e.target.classList.remove('cell_active');
 
@@ -148,6 +156,7 @@ class Field {
     }
   }
 
+  // Нужно для анимации перемещения над клетками с зажатой мышкой. На событии mouseMove
   _hoverOn(e) {
     if (mouse && e.target.classList.contains('cell')) {
       e.target.classList.add('cell_active');
@@ -172,6 +181,7 @@ class Field {
     const cellIndex = [...curRow.children].indexOf(e.target);
     const soundBtn = document.querySelector('.head__sound');
 
+    // Если правая кнопка мыши то добавляет флажок(если остались) на текущую ячейку и уменьшает количество флажков, если на ячейке был флажок то прибавляет флажок. Выводит на страницу количество флажков и проигрывает звук.
     if (e.button === 2) {
       if (e.target.classList.contains('cell_flag')) {
         flags += 1;
@@ -186,6 +196,7 @@ class Field {
       return;
     }
 
+    // Если первый клик то устанавливает мины и запускает интервал с секундами.
     if (firstClick) {
       if (e.button !== 2) {
         checkedArr.push([Number(e.target.dataset.y), Number(e.target.dataset.x)]);
@@ -194,10 +205,12 @@ class Field {
       this._setMines(field);
     }
 
+    // Запрещает клик по флагу
     if (e.target.classList.contains('cell_flag')) {
       return;
     }
 
+    // Устанавливает цифры и если поблизости нет мин открывает ближайшие ячейки. Запускает звук при клике не на мину.
     const counter = this._setCellValue(field, e.target, rowIndex, cellIndex);
     if (counter === 0) {
       this._openNearCells(field, e.target, rowIndex, cellIndex);
@@ -206,11 +219,13 @@ class Field {
       playSound('../assets/sound/Клик.mp3', 0.4);
     }
 
+    // Устанавливает флаг победы и проигрывает звук если все продуктивные ячейки открыты
     if (checkedArr.length + minesCoords.length === this.numCells * this.numCells && !isWin) {
       if (!soundBtn.classList.contains('head__sound_off')) playSound('../assets/sound/Победа.mp3', 0.3);
       isWin = true;
     }
 
+    // В случае победы или поражения создает и добавляет модальное окно, убирает флаг сохранения и сохраненное поле
     if (isWin || isLose) {
       const modal = new Modal(isWin, isLose, secondsCounter, clicksCounter);
       document.body.prepend(modal.build());
@@ -219,12 +234,14 @@ class Field {
       isSaved = false;
     }
 
+    // Перерисовывает таблицу результатов при победе
     if (isWin) {
       this._setScore();
     }
-    savedField = this.field;
+    // savedField = this.field;
   }
 
+  // Убирает флаг первого клика и добавляет в массив координаты мин так, чтобы не было повторов и расположения на месте первого клика.
   _setMines(field) {
     firstClick = false;
     for (let i = 0; i < this.mines; i++) {
@@ -247,6 +264,7 @@ class Field {
     }
   }
 
+  // Возвращает значение ячейки при клике в зависимости от количества мин поблизости. Если клик по флажку то ничего не произойдет, при клике по мине будет ячейка изменится и проиграется звук.
   _setCellValue(field, cell, rowIndex, cellIndex) {
     let counter = 0;
     const soundBtn = document.querySelector('.head__sound');
@@ -303,6 +321,7 @@ class Field {
     return counter;
   }
 
+  // Рекурсивно открывает ячейки покругу если не цифра и не бомба
   _openNearCells(field, cell, rowIndex, cellIndex) {
     let counter;
     const left = field[rowIndex].children[cellIndex - 1];
@@ -362,6 +381,7 @@ class Field {
     }
   }
 
+  // Считает клики если ячейка не открыта и на ней нет флага
   _setClicksCount(e) {
     if (!e.target.className.match(/(open|flag)/) && e.button !== 2) {
       clicksCounter += 1;
@@ -370,6 +390,7 @@ class Field {
     }
   }
 
+  // Запускает интервал который считает секунды и выводит на экран
   _setSecondsInterval() {
     return setInterval(() => {
       secondsCounter += 1;
@@ -378,37 +399,29 @@ class Field {
     }, 1000);
   }
 
+  // Выводит результат с текущей темой
   _setScore() {
     setScore(score, clicksCounter, secondsCounter, this.mines, flags, this.numCells, isWin);
     switchTheme(false);
-    // if (isWin) score.unshift(`Steps: ${clicksCounter}. Time: ${secondsCounter} seconds. Flags: ${this.mines - flags}. Field: ${this.numCells}x${this.numCells}. Mines: ${this.mines}`);
-    // if (score.length > 10) score.pop();
-    // const list = Array.from(document.querySelectorAll('.result__item'));
-    // const fieldStyle = getComputedStyle(this.field);
-    // const result = document.querySelector('.result');
-    // result.style.width = `${fieldStyle.width}`;
-    // console.log(fieldStyle.width);
-    // score.forEach((el, index) => {
-    //   list[index].textContent = el;
-    // });
   }
 }
 
-let mouse = false;
-let checkedArr = JSON.parse(localStorage.getItem('checkedArr')) || [];
-let minesCoords = JSON.parse(localStorage.getItem('minesCoords')) || [];
-let savedField = getField('field') || null;
-let firstClick = localStorage.getItem('firstClick') === 'true' ? true : false;
-let isLose = localStorage.getItem('isLose') === 'true' ? true : false;
-let isWin = localStorage.getItem('isWin') === 'true' ? true : false;
-let prevClickUp;
-let clicksCounter = Number(localStorage.getItem('clicksCounter')) || 0;
-let secondsCounter = Number(localStorage.getItem('secondsCounter')) || 0;
-let secondsInterval;
-let flags = Number(localStorage.getItem('flags')) || 0;
-let isSaved = localStorage.getItem('isSaved') === 'true' ? true : false;
-let score = JSON.parse(localStorage.getItem('score')) || [];
+let mouse = false; // Флаг нажата ли мышь
+let checkedArr = JSON.parse(localStorage.getItem('checkedArr')) || []; // Массив с массивами координат открытых ячеек
+let minesCoords = JSON.parse(localStorage.getItem('minesCoords')) || []; // Массив с массивами координат мин
+let savedField = getField('field') || null; // Сохраненное поле
+let firstClick = localStorage.getItem('firstClick') === 'true' ? true : false; // Флаг первого клика
+let isLose = localStorage.getItem('isLose') === 'true' ? true : false; // Флаг при поражении
+let isWin = localStorage.getItem('isWin') === 'true' ? true : false; // Флаг при победе
+let prevClickUp; // Флаг для сохранения интервала предыдущего поля, на него ставится bind при генерации нового поля
+let clicksCounter = Number(localStorage.getItem('clicksCounter')) || 0; // Количество кликов
+let secondsCounter = Number(localStorage.getItem('secondsCounter')) || 0; // Количество секунд
+let secondsInterval; // Сохраняет интервал и удаляет при победе или поражении
+let flags = Number(localStorage.getItem('flags')) || 0; // Количество флажков
+let isSaved = localStorage.getItem('isSaved') === 'true' ? true : false; // Флаг сохранена ли игра
+let score = JSON.parse(localStorage.getItem('score')) || []; // Массив со строками текущего счета
 
+// Сохранение данных если нет победы, поражения и был первый клик.
 window.addEventListener('beforeunload', () => {
   if (!isLose && !isWin && !firstClick) {
     isSaved = true;
@@ -438,10 +451,12 @@ window.addEventListener('beforeunload', () => {
   }
 });
 
+// Сохраняет все поле как строку.
 function saveField(field) {
   if (field) localStorage.setItem('field', field.outerHTML);
 }
 
+// Получает поле как dom
 function getField() {
   const strField = localStorage.getItem('field');
   const field = document.createElement('div');
@@ -449,6 +464,7 @@ function getField() {
   return field.firstChild;
 }
 
+// Функция проверки ячейки, открыта ли она или есть ли там мина.
 function isExist(checkArr, cell) {
   return checkArr.find((c) => Number(c[0]) === Number(cell.dataset.y) && Number(c[1]) === Number(cell.dataset.x)) || false;
 }

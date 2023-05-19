@@ -1,5 +1,6 @@
 import { createNode, insertNode } from './useNode';
 
+// Функция изменения результатов на странице и ограничения страницы по ширине ячеек.
 export function setScore(score, cliks, seconds, mines, flags, fieldSize, isWin = false) {
   if (isWin) score.unshift(`Steps: ${cliks}. Time: ${seconds} seconds. Flags: ${mines - flags}. Field: ${fieldSize}x${fieldSize}. Mines: ${mines}`);
   if (score.length > 10) score.pop();
@@ -16,6 +17,7 @@ export function setScore(score, cliks, seconds, mines, flags, fieldSize, isWin =
   });
 }
 
+// Функция создания таблицы с результатами и добавления их на страницу.
 function createScore(score) {
   const gameResult = createNode('div', 'game__result');
   const result = createNode('div', 'result');

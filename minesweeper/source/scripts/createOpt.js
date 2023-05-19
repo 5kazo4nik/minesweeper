@@ -1,12 +1,13 @@
 import { createNode, insertNode } from './useNode';
 
+// Класс генерации опций.
 class Options {
-  constructor(fieldSize, mines, isDark = false) {
+  constructor(fieldSize, mines) {
     this.fieldSize = fieldSize;
     this.mines = mines;
-    this.isDark = isDark;
   }
 
+  // Генерирует нужные элементы и возвращает узел-обертку.
   build() {
     this._createElements();
     this._appendElements();
@@ -31,7 +32,6 @@ class Options {
     this.opt3 = createNode('option');
 
     this.themeBtn = createNode('div', 'head__theme');
-    if (this.isDark) this.themeBtn.classList.add('head__theme_dark');
   }
 
   _appendElements() {
@@ -65,9 +65,6 @@ class Options {
     this.inputMines.type = 'number';
     this.inputMines.placeholder = 'mines';
     this.inputMines.value = this.mines;
-    // if (this.num === 10) this.inputMines.value = 10;
-    // if (this.num === 15) this.inputMines.value = 35;
-    // if (this.num === 25) this.inputMines.value = 60;
   }
 }
 

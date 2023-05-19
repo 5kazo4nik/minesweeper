@@ -1,5 +1,6 @@
 import { createNode, insertNode } from './useNode';
 
+// Класс для генерации модального окна и добавления его в документ
 export class Modal {
   constructor(isWin, isLose, seconds, clicks) {
     this.isWin = isWin;

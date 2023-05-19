@@ -4,24 +4,24 @@ import { setScore } from './setScore';
 import { switchTheme } from './switchTheme';
 import { createNode, insertNode } from './useNode';
 
+// Класс для создания игры
 class Game {
+  // Создает и добавляет нужные элементы друг в друга и в документ. Меняет тему на сохраненную, запускает фоновую музыку
   build() {
     this._createElements();
     this._appendElements();
     this._bindEvents();
-    // this._switchTheme()
     switchTheme(false);
     playBg();
   }
 
   _createElements() {
     this.bg = createNode('div', 'bg-gif');
-    if (isDark) this.bg.classList.add('bg-gif_dark');
     this.main = createNode('main', 'wrapper');
     this.game = createNode('div', 'game');
 
     const builderField = new Field(fieldSize, mines, isChange);
-    const builderOptions = new Options(fieldSize, mines, isDark);
+    const builderOptions = new Options(fieldSize, mines);
 
     this.options = builderOptions.build();
     this.field = builderField.build();
@@ -59,45 +59,46 @@ class Game {
   }
 
   _bindEvents() {
-    this.game.addEventListener('contextmenu', (e) => e.preventDefault());
+    this.game.addEventListener('contextmenu', (e) => e.preventDefault()); // Запрещает контекстное меню на поле
 
-    const select = document.querySelector('.head__size');
+    const select = document.querySelector('.head__size'); // Пересоздает поле с определенным количеством ячеек и оставляет текущую тему
     const changeLevel = this._changeLevel.bind(this);
     select.addEventListener('input', (e) => {
       changeLevel(e);
       switchTheme(false);
     });
 
-    const input = document.querySelector('.head__mines');
+    const input = document.querySelector('.head__mines'); // Пересоздает поле с определенным количеством мин и оставляет текущую тему
     const changeMines = this._changeMines.bind(this);
     input.addEventListener('change', (e) => {
       changeMines(e);
       switchTheme(false);
     });
 
-    const themeBtn = document.querySelector('.head__theme');
+    const themeBtn = document.querySelector('.head__theme'); // Меняет тему, сохраняет номер темы и запускает фоновый звук
     themeBtn.addEventListener('click', () => {
       switchTheme(true);
       theme = Number(localStorage.getItem('theme')) || 0;
       playBg();
     });
 
-    const soundBtn = document.querySelector('.head__sound');
+    const soundBtn = document.querySelector('.head__sound'); // Включает или выключает звуки
     soundBtn.addEventListener('click', (e) => {
       e.target.classList.toggle('head__sound_off');
       playBg();
     });
 
-    audioBg.addEventListener('ended', playBg);
+    audioBg.addEventListener('ended', playBg); // Перезапускает фон если закончился
 
+    // Удаляет модальное окно из документа
     document.addEventListener('click', (e) => {
       if (e.target.classList.contains('modal')) {
         e.target.remove();
       }
     });
 
+    // сохраняет количество мин и размер поля
     window.addEventListener('beforeunload', () => {
-      localStorage.setItem('isDark', isDark);
       localStorage.setItem('mines', mines);
       localStorage.setItem('fieldSize', fieldSize);
     });
@@ -105,12 +106,14 @@ class Game {
 
   // /////////////////////////////////////////
 
+  // Устанавливает таблицу результатов если результаты имеются.
   _setScore() {
     if (score.length) {
       setScore(score, clicksCounter, secondsCounter, mines, flags, fieldSize);
     }
   }
 
+  // Смена уровня сложности с изменением поля, количества мин и изменением размера таблицы результатов и перезапуском игры
   _changeLevel(e) {
     isChange = true;
     let builderField;
@@ -138,6 +141,7 @@ class Game {
     this._setScore();
   }
 
+  // Изменяет количество мин и перезапускает игру
   _changeMines(e) {
     const value = Number(e.target.value);
     const select = document.querySelector('.head__size');
@@ -158,6 +162,7 @@ class Game {
   }
 }
 
+// Запускает фоновый звук если разрешено.
 function playBg() {
   const soundBtn = document.querySelector('.head__sound');
   if (!soundBtn.classList.contains('head__sound_off')) {
@@ -186,17 +191,15 @@ function playBg() {
 }
 
 const audioBg = new Audio();
-let isChange = false;
-let isDark = localStorage.getItem('isDark') === 'true' ? true : false;
-let mines = Number(localStorage.getItem('mines')) || 10;
-let fieldSize = Number(localStorage.getItem('fieldSize')) || 10;
+let isChange = false; // Флаг было ли изменение количества мин или ячеек.
+let mines = Number(localStorage.getItem('mines')) || 10; // Количество мин
+let fieldSize = Number(localStorage.getItem('fieldSize')) || 10; // Размер поля
 
-const score = JSON.parse(localStorage.getItem('score')) || [];
-const clicksCounter = Number(localStorage.getItem('clicksCounter')) || 0;
-const secondsCounter = Number(localStorage.getItem('secondsCounter')) || 0;
-const flags = Number(localStorage.getItem('flags')) || 0;
+const score = JSON.parse(localStorage.getItem('score')) || []; // Массив со строками сохраненных результатов
+const clicksCounter = Number(localStorage.getItem('clicksCounter')) || 0; // Количество кликов
+const secondsCounter = Number(localStorage.getItem('secondsCounter')) || 0; // Количество секунд
+const flags = Number(localStorage.getItem('flags')) || 0; // Количество флажков
 
-let theme = Number(localStorage.getItem('theme')) || 0;
-// const themeArr = ['', '_winter', '_spring', '_summer', '_dark'];
+let theme = Number(localStorage.getItem('theme')) || 0; // Номер текущей темы
 
 export { Game };

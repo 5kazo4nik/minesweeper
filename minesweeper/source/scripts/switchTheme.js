@@ -1,3 +1,4 @@
+// Функция смены темы, аргументом принимает true если был клик или false если нет. Получает текущую тему из локали, находит нужные файлы и по определенным условиям добавляет и убирает определенные классы.
 export function switchTheme(click) {
   let theme = Number(localStorage.getItem('theme')) || 0;
   const themeArr = ['', '_winter', '_spring', '_summer', '_dark'];
@@ -6,7 +7,6 @@ export function switchTheme(click) {
     theme += 1;
     theme = theme > 4 ? 0 : theme;
   }
-  console.log(theme);
 
   const bg = document.querySelector('.bg-gif');
   const game = document.querySelector('.game');
@@ -21,10 +21,6 @@ export function switchTheme(click) {
   const modalWindow = document.querySelector('.modal__window');
 
   if (theme > 0) {
-    // const nodes = [bg, game, headOpt, btnTheme, count, btnRestart, field, result]
-    // nodes.forEach((node) => {
-    //   node.classList.add()
-    // })
     bg.classList.add(`bg-gif${themeArr[theme]}`);
     game.classList.add(`game${themeArr[theme]}`);
     headOpt.classList.add(`head__opt${themeArr[theme]}`);
@@ -53,7 +49,4 @@ export function switchTheme(click) {
     }
   });
   localStorage.setItem('theme', theme);
-  // bg.classList.toggle('bg-gif_dark');
-  // e.target.classList.toggle('head__theme_dark');
-  // isDark = !isDark;
 }
