@@ -4,6 +4,12 @@ import { setScore } from './setScore';
 import { switchTheme } from './switchTheme';
 import { createNode, insertNode } from './useNode';
 
+import water from '../assets/sound/Вода.mp3';
+import fire from '../assets/sound/Костер.mp3';
+import wind from '../assets/sound/ветер.mp3';
+import bells from '../assets/sound/колокольчики.mp3';
+import birds from '../assets/sound/птицы.mp3';
+
 // Класс для создания игры
 class Game {
   // Создает и добавляет нужные элементы друг в друга и в документ. Меняет тему на сохраненную, запускает фоновую музыку
@@ -168,19 +174,19 @@ function playBg() {
   const soundBtn = document.querySelector('.head__sound');
   if (!soundBtn.classList.contains('head__sound_off')) {
     if (theme === 0) {
-      audioBg.src = '../assets/sound/Вода.mp3';
+      audioBg.src = water;
     }
     if (theme === 1) {
-      audioBg.src = '../assets/sound/колокольчики.mp3';
+      audioBg.src = bells;
     }
     if (theme === 2) {
-      audioBg.src = '../assets/sound/птицы.mp3';
+      audioBg.src = birds;
     }
     if (theme === 3) {
-      audioBg.src = '../assets/sound/ветер.mp3';
+      audioBg.src = wind;
     }
     if (theme === 4) {
-      audioBg.src = '../assets/sound/Костер.mp3';
+      audioBg.src = fire;
     }
     audioBg.autoplay = true;
     audioBg.currentTime = 0;

@@ -4,6 +4,12 @@ import { setScore } from './setScore';
 import { switchTheme } from './switchTheme';
 import { createNode, insertNode } from './useNode';
 
+import bombSound from '../assets/sound/Взрыв.mp3';
+import clickSound from '../assets/sound/Клик.mp3';
+import winSound from '../assets/sound/Победа.mp3';
+import loseSound from '../assets/sound/Поражение.mp3';
+import flagSound from '../assets/sound/Флажок.mp3';
+
 // Класс создания поля
 class Field {
   constructor(num, mines, isChange, save = true) {
@@ -193,7 +199,7 @@ class Field {
       }
       document.querySelector('.count__flags').textContent = String(flags).padStart(3, 0);
       e.target.classList.toggle('cell_flag');
-      if (!soundBtn.classList.contains('head__sound_off')) playSound('../assets/sound/Флажок.mp3', 0.3);
+      if (!soundBtn.classList.contains('head__sound_off')) playSound(flagSound, 0.3);
       return;
     }
 
@@ -217,12 +223,12 @@ class Field {
       this._openNearCells(field, e.target, rowIndex, cellIndex);
     }
     if (counter >= 0 && !soundBtn.classList.contains('head__sound_off')) {
-      playSound('../assets/sound/Клик.mp3', 0.4);
+      playSound(clickSound, 0.4);
     }
 
     // Устанавливает флаг победы и проигрывает звук если все продуктивные ячейки открыты
     if (checkedArr.length + minesCoords.length === this.numCells * this.numCells && !isWin) {
-      if (!soundBtn.classList.contains('head__sound_off')) playSound('../assets/sound/Победа.mp3', 0.3);
+      if (!soundBtn.classList.contains('head__sound_off')) playSound(winSound, 0.3);
       isWin = true;
     }
 
@@ -280,8 +286,8 @@ class Field {
       document.querySelector('.btn-restart').classList.add('btn-restart_lose');
       isLose = true;
       if (!soundBtn.classList.contains('head__sound_off')) {
-        playSound('../assets/sound/Взрыв.mp3', 0.3);
-        playSound('../assets/sound/Поражение.mp3', 0.3);
+        playSound(bombSound, 0.3);
+        playSound(loseSound, 0.3);
       }
       return -1;
     }

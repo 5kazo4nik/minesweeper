@@ -24,7 +24,6 @@ module.exports = (env, options) => {
   const config = {
     mode: isProduction ? 'production' : 'development',
     devtool: isProduction ? false : 'source-map',
-    // watch: !isProduction,
     watchOptions: {
       poll: true,
       ignored: /node_modules/,
