@@ -108,6 +108,7 @@ class Game {
 
   // Устанавливает таблицу результатов если результаты имеются.
   _setScore() {
+    const score = JSON.parse(localStorage.getItem('score')) || [];
     if (score.length) {
       setScore(score, clicksCounter, secondsCounter, mines, flags, fieldSize);
     }

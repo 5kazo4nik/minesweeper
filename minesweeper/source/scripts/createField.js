@@ -153,6 +153,7 @@ class Field {
       if (isWin || isLose) {
         clearInterval(secondsInterval);
       }
+      if (isWin) localStorage.setItem('score', JSON.stringify(score));
     }
   }
 
@@ -238,7 +239,7 @@ class Field {
     if (isWin) {
       this._setScore();
     }
-    // savedField = this.field;
+    savedField = this.field;
   }
 
   // Убирает флаг первого клика и добавляет в массив координаты мин так, чтобы не было повторов и расположения на месте первого клика.
@@ -447,7 +448,6 @@ window.addEventListener('beforeunload', () => {
     localStorage.removeItem('isWin', isWin);
     localStorage.removeItem('isLose', isLose);
     localStorage.setItem('isSaved', isSaved);
-    if (isWin) localStorage.setItem('score', JSON.stringify(score));
   }
 });
 
