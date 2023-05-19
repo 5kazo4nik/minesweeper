@@ -344,6 +344,7 @@ select {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+  @extend %transition;
 }
 
 .head__inputs {
@@ -358,10 +359,10 @@ select {
   height: 30px;
   cursor: pointer;
   @extend %transition;
-  background-image: url(../assets/svg/wondicon-ui-free-speaker_111240.svg);
+  background-image: url(../assets/svg/1486485571-198high-loud-music-on-sound-speaker-volume_81180.svg);
 
   &_off {
-    background-image: url(../assets/svg/3643732-mute-sound-speaker-voice-volume_113439.svg);
+    background-image: url(../assets/svg/1486506271-music-mute-sound-volume-speaker-audio-player_81465.svg);
   }
 }
 
@@ -374,7 +375,7 @@ select {
   cursor: pointer;
 
   &_dark {
-    background-image: url('../assets/svg/halfmoon_102699.svg');
+    background-image: url('../assets/svg/moon_stars_night_midnight_sky_icon_194248.svg');
   }
 
   &_winter {
@@ -403,6 +404,7 @@ select {
 .count {
   padding: 10px 30px 10px 30px;
   margin-bottom: 20px;
+  @extend %transition;
 }
 
 .count__content {
@@ -434,6 +436,7 @@ select {
   background-position: center;
   background-size: cover;
   cursor: pointer;
+  transition: background-color 0.5s ease-in-out;
 
   &_lose {
     background-image: url('../assets/svg/2369366-emoticon-face-mute-smiley_85428.svg');
@@ -460,6 +463,7 @@ select {
   justify-content: center;
   text-align: center;
   font-weight: bold;
+  transition: background-color 0.5s ease-in-out;
 
   &_bomb {
     background-image: url('../assets/svg/bomb_icon_136879.svg');
@@ -494,6 +498,7 @@ select {
 
 .result {
   box-sizing: border-box;
+  @extend %transition;
 }
 
 .game__result {
