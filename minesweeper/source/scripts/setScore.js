@@ -11,7 +11,7 @@ export function setScore(score, cliks, seconds, mines, flags, fieldSize, isWin =
   const cellStyle = getComputedStyle(cell);
   const result = document.querySelector('.result');
   const cellWidth = cellStyle.width;
-  result.style.width = `${cellWidth.slice(0, cellWidth.length - 2) * fieldSize + 6 * fieldSize}px`;
+  result.style.width = `${cellWidth.slice(0, cellWidth.length - 2) * fieldSize + 6 * fieldSize + 8}px`;
   score.forEach((el, index) => {
     list[index].textContent = el;
   });

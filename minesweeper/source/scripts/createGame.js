@@ -103,6 +103,14 @@ class Game {
       }
     });
 
+    window.addEventListener('resize', () => {
+      const cell = document.querySelector('.cell');
+      const cellStyle = getComputedStyle(cell);
+      const result = document.querySelector('.result');
+      const cellWidth = cellStyle.width;
+      result.style.width = `${cellWidth.slice(0, cellWidth.length - 2) * fieldSize + 6 * fieldSize + 8}px`;
+    });
+
     // сохраняет количество мин и размер поля
     window.addEventListener('beforeunload', () => {
       localStorage.setItem('mines', mines);
