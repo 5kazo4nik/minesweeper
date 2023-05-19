@@ -195,20 +195,20 @@ $color-dark-border-l: rgb(73, 52, 158);
 }
 
 .cell_summer.cell_active {
-  border-top: 3px solid $color-summer-border-d;
-  border-left: 3px solid $color-summer-border-d;
+  border-top: 3px solid rgba(156, 156, 156, 0);
+  border-left: 3px solid rgba(156, 156, 156, 0);
 }
 .cell_spring.cell_active {
-  border-top: 3px solid $color-spring-border-d;
-  border-left: 3px solid $color-spring-border-d;
+  border-top: 3px solid rgba(50, 148, 65, 0);
+  border-left: 3px solid rgba(50, 148, 65, 0);
 }
 .cell_winter.cell_active {
-  border-top: 3px solid $color-winter-border-d;
-  border-left: 3px solid $color-winter-border-d;
+  border-top: 3px solid rgba(20, 146, 230, 0);
+  border-left: 3px solid rgba(20, 146, 230, 0);
 }
 .cell_dark.cell_active {
-  border-top: 3px solid $color-dark-border-d;
-  border-left: 3px solid $color-dark-border-d;
+  border-top: 3px solid rgba(77, 0, 77, 0);
+  border-left: 3px solid rgba(77, 0, 77, 0);
 }
 
 .cell_summer.cell_open {
